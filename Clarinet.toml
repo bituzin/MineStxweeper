@@ -1,0 +1,41 @@
+[project]
+name = "minesweeper-stacks"
+description = "Decentralized Minesweeper on Stacks blockchain"
+authors = []
+telemetry = false
+cache_dir = ".cache"
+requirements = []
+
+[contracts.game-core]
+path = "contracts/game-core.clar"
+
+[contracts.board-generator]
+path = "contracts/board-generator.clar"
+
+[contracts.win-checker]
+path = "contracts/win-checker.clar"
+
+[contracts.leaderboard]
+path = "contracts/leaderboard.clar"
+
+[contracts.achievement-nft]
+path = "contracts/achievement-nft.clar"
+
+[contracts.player-profile]
+path = "contracts/player-profile.clar"
+
+[contracts.tournament]
+path = "contracts/tournament.clar"
+
+[contracts.wager]
+path = "contracts/wager.clar"
+
+[contracts.daily-challenge]
+path = "contracts/daily-challenge.clar"
+
+[contracts.economy]
+path = "contracts/economy.clar"
+
+[repl]
+costs_version = 2
+parser_version = 2
