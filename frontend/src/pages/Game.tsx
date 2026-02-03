@@ -1,0 +1,148 @@
+import React, { useState } from 'react';
+import { useGameStore } from '@/store/gameStore';
+import { Difficulty, GameStatus } from '@/types';
+import { Board } from '@/components/game/Board';
+import { GameInfo } from '@/components/game/GameInfo';
+import { Button } from '@/components/ui/Button';
+import { RefreshCw, Trophy, Skull } from 'lucide-react';
+
+export function Game() {
+  const { startNewGame, resetGame, status, difficulty } = useGameStore();
+  const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty>(Difficulty.BEGINNER);
+
+  const handleStartGame = () => {
+    startNewGame(selectedDifficulty);
+  };
+
+  const handleReset = () => {
+    resetGame();
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-900 py-8">
+      <div className="container mx-auto px-4">
+        <h1 className="text-4xl font-bold text-white text-center mb-8">
+          Play Minesweeper
+        </h1>
+
+        {/* Difficulty Selection */}
+        {status === GameStatus.NOT_STARTED && (
+          <div className="max-w-2xl mx-auto mb-8 bg-gray-800 p-8 rounded-xl">
+            <h2 className="text-2xl font-bold text-white mb-4">Select Difficulty</h2>
+            
+            <div className="grid grid-cols-3 gap-4 mb-6">
+              <DifficultyButton
+                difficulty={Difficulty.BEGINNER}
+                selected={selectedDifficulty === Difficulty.BEGINNER}
+                onClick={() => setSelectedDifficulty(Difficulty.BEGINNER)}
+                label="Beginner"
+                details="9×9, 10 mines"
+              />
+              
+              <DifficultyButton
+                difficulty={Difficulty.INTERMEDIATE}
+                selected={selectedDifficulty === Difficulty.INTERMEDIATE}
+                onClick={() => setSelectedDifficulty(Difficulty.INTERMEDIATE)}
+                label="Intermediate"
+                details="16×16, 40 mines"
+              />
+              
+              <DifficultyButton
+                difficulty={Difficulty.EXPERT}
+                selected={selectedDifficulty === Difficulty.EXPERT}
+                onClick={() => setSelectedDifficulty(Difficulty.EXPERT)}
+                label="Expert"
+                details="30×16, 99 mines"
+              />
+            </div>
+
+            <Button onClick={handleStartGame} className="w-full" size="lg">
+              Start Game
+            </Button>
+          </div>
+        )}
+
+        {/* Game UI */}
+        {status !== GameStatus.NOT_STARTED && (
+          <div className="flex flex-col items-center gap-6">
+            {/* Game Controls */}
+            <div className="bg-gray-800 p-6 rounded-xl w-full max-w-4xl">
+              <div className="flex justify-between items-center">
+                <GameInfo />
+                
+                <div className="flex gap-3">
+                  <Button onClick={handleReset} variant="secondary">
+                    <RefreshCw size={18} className="mr-2" />
+                    New Game
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            {/* Game Over Messages */}
+            {status === GameStatus.WON && (
+              <div className="bg-green-600 text-white p-6 rounded-xl shadow-2xl animate-pulse">
+                <div className="flex items-center gap-3 text-2xl font-bold">
+                  <Trophy size={32} />
+                  <span>You Won! 🎉</span>
+                </div>
+                <p className="mt-2">Congratulations on clearing the board!</p>
+              </div>
+            )}
+
+            {status === GameStatus.LOST && (
+              <div className="bg-red-600 text-white p-6 rounded-xl shadow-2xl">
+                <div className="flex items-center gap-3 text-2xl font-bold">
+                  <Skull size={32} />
+                  <span>Game Over!</span>
+                </div>
+                <p className="mt-2">You hit a mine. Try again!</p>
+              </div>
+            )}
+
+            {/* Board */}
+            <div className="flex justify-center">
+              <Board />
+            </div>
+
+            {/* Instructions */}
+            <div className="bg-gray-800 p-6 rounded-xl max-w-2xl text-gray-300">
+              <h3 className="text-lg font-bold text-white mb-3">How to Play</h3>
+              <ul className="space-y-2 text-sm">
+                <li>• <strong>Left Click:</strong> Reveal a cell</li>
+                <li>• <strong>Right Click:</strong> Place/remove a flag</li>
+                <li>• <strong>Numbers:</strong> Show how many mines are adjacent</li>
+                <li>• <strong>Goal:</strong> Reveal all non-mine cells</li>
+                <li>• <strong>Tip:</strong> First click is always safe!</li>
+              </ul>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+interface DifficultyButtonProps {
+  difficulty: Difficulty;
+  selected: boolean;
+  onClick: () => void;
+  label: string;
+  details: string;
+}
+
+function DifficultyButton({ selected, onClick, label, details }: DifficultyButtonProps) {
+  return (
+    <button
+      onClick={onClick}
+      className={`p-4 rounded-lg border-2 transition-all ${
+        selected
+          ? 'border-primary-500 bg-primary-900 text-white'
+          : 'border-gray-600 bg-gray-700 text-gray-300 hover:border-gray-500'
+      }`}
+    >
+      <div className="font-bold text-lg">{label}</div>
+      <div className="text-sm mt-1">{details}</div>
+    </button>
+  );
+}
