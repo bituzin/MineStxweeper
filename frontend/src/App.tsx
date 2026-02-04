@@ -17,7 +17,7 @@ function App() {
     <BrowserRouter>
       <div className="min-h-screen bg-gray-900 flex">
         {/* Sidebar navigation */}
-        <nav className="flex flex-col items-start gap-6 w-56 py-8 pr-8 border-r border-gray-800 h-screen">
+        <nav className="flex flex-col items-start gap-6 w-56 py-8 pr-8 border-r border-gray-800 h-screen pl-6">
           <Link to="/game" className="flex items-center gap-2 hover:text-primary-400 transition text-white">
             <Bomb size={20} />
             <span>Play</span>
