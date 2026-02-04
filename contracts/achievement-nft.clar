@@ -123,7 +123,7 @@
     
     ;; Award bonus rewards
     (try! (contract-call? .economy award-achievement-bonus player achievement-id))
-    
+    (print-event {event: "award-achievement", player: player, achievement-id: achievement-id, token-id: new-token-id})
     (ok new-token-id)
   )
 )
@@ -174,6 +174,7 @@
       true
     )
     
+    (print-event {event: "check-achievements", player: player, game-id: game-id})
     (ok true)
   )
 )

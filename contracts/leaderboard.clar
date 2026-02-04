@@ -99,7 +99,7 @@
     
     ;; Check world record
     (try! (check-world-record difficulty player score time game-id))
-    
+    (print-event {event: "submit-score", player: player, game-id: game-id, difficulty: difficulty, score: score, time: time})
     (ok true)
   )
 )

@@ -87,6 +87,7 @@
     )
     
     (var-set wager-id-nonce wager-id)
+    (print-event {event: "create-wager", wager-id: wager-id, challenger: tx-sender, opponent: opponent, difficulty: difficulty, stake: stake})
     (ok wager-id)
   )
 )

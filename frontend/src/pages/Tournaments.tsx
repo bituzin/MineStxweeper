@@ -10,7 +10,7 @@ export function Tournaments() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-900 py-8">
+    <div className="min-h-screen bg-gray-900 pt-8">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-4xl font-bold text-white flex items-center gap-3">

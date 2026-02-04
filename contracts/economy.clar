@@ -176,15 +176,9 @@
     ;; Transfer tokens (in production, use FT transfer)
     ;; For now, just update balances
     
-    ;; Update claimed history
-    (map-set claimed-rewards
-      {player: player}
-      {
-        total-tokens-claimed: (+ (get total-tokens-claimed claimed) tokens),
-        total-stx-claimed: (+ (get total-stx-claimed claimed) stx),
-        last-claim-at: block-height
-      }
-    )
+    ;; Update totals
+    (var-set total-rewards-distributed (+ (var-get total-rewards-distributed) tokens))
+    (print-event {event: "claim-rewards", player: player, tokens: tokens, stx: stx})
     
     ;; Clear pending
     (map-set pending-rewards
@@ -196,8 +190,15 @@
       }
     )
     
-    ;; Update totals
-    (var-set total-rewards-distributed (+ (var-get total-rewards-distributed) tokens))
+    ;; Update claimed history
+    (map-set claimed-rewards
+      {player: player}
+      {
+        total-tokens-claimed: (+ (get total-tokens-claimed claimed) tokens),
+        total-stx-claimed: (+ (get total-stx-claimed claimed) stx),
+        last-claim-at: block-height
+      }
+    )
     
     (ok {tokens: tokens, stx: stx})
   )

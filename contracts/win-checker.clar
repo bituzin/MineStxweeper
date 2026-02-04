@@ -38,6 +38,7 @@
         (try! (contract-call? .player-profile update-win-stats (get player game) game-id (get difficulty game)))
         (try! (contract-call? .leaderboard submit-score game-id (get player game) (get difficulty game) final-score))
         (try! (contract-call? .economy calculate-rewards game-id))
+        (print-event {event: "check-win-condition", game-id: game-id, player: (get player game)})
         
         (ok true)
       )
