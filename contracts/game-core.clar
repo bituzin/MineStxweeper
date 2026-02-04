@@ -193,6 +193,7 @@
     
     ;; Call board generator (will be handled by board-generator contract)
     ;; For now, just return game-id
+    (print-event {event: "create-game", game-id: game-id, player: tx-sender})
     (ok game-id)
   )
 )
@@ -226,6 +227,7 @@
     
     ;; This will interact with board-generator to check if mine
     ;; For now, return ok - actual implementation will check mine status
+    (print-event {event: "reveal-cell", game-id: game-id, x: x, y: y, player: tx-sender})
     (ok true)
   )
 )
@@ -262,6 +264,7 @@
     )
     
     (ok true)
+    (print-event {event: "reveal-cells-batch", game-id: game-id, player: tx-sender})
   )
 )
 
@@ -303,6 +306,7 @@
     )
     
     (ok (not currently-flagged))
+    (print-event {event: "toggle-flag", game-id: game-id, x: x, y: y, player: tx-sender})
   )
 )
 
@@ -332,6 +336,7 @@
     )
     
     (ok true)
+    (print-event {event: "mark-game-lost", game-id: game-id, player: tx-sender})
   )
 )
 
@@ -358,6 +363,7 @@
     )
     
     (ok true)
+    (print-event {event: "mark-game-won", game-id: game-id, player: tx-sender, final-score: final-score})
   )
 )
 
@@ -408,5 +414,6 @@
     (asserts! (is-eq tx-sender CONTRACT_OWNER) ERR_NOT_AUTHORIZED)
     (var-set contract-paused paused)
     (ok true)
+    (print-event {event: "set-contract-paused", paused: paused, sender: tx-sender})
   )
 )
