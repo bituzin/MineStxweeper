@@ -93,6 +93,7 @@
     )
     
     (var-set tournament-id-nonce tournament-id)
+    (print-event {event: "create-tournament", tournament-id: tournament-id, organizer: tx-sender, name: name})
     (ok tournament-id)
   )
 )
