@@ -142,6 +142,7 @@
         reward-claimed: false
       }
     )
+    (print-event {event: "complete-daily-challenge", challenge-id: challenge-id, player: player, game-id: game-id})
     
     ;; Update challenge stats
     (let
