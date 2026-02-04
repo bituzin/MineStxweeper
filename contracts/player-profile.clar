@@ -111,7 +111,7 @@
     
     ;; Update streaks
     (try! (update-win-streak player won))
-    
+    (print-event {event: "update-win-stats", player: player, game-id: game-id, difficulty: difficulty, won: won})
     (ok true)
   )
 )
