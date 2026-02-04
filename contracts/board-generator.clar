@@ -82,7 +82,7 @@
         first-click-y: (some first-click-y)
       }
     )
-    
+    (print-event {event: "generate-board", game-id: game-id, player: tx-sender})
     (ok commitment)
   )
 )
