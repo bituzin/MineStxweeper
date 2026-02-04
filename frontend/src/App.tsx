@@ -50,7 +50,7 @@ function App() {
           <div className="flex items-center justify-between px-8 py-4 border-b border-gray-800">
             <Link to="/" className="flex items-center gap-2 text-2xl font-bold text-white">
               <Bomb size={32} className="text-primary-500" />
-              <span>Minesweeper</span>
+              <span>MineStxweeper</span>
             </Link>
             <div>
               {isAuthenticated() ? (
