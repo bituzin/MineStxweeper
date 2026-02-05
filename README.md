@@ -274,3 +274,20 @@ This is experimental software on a blockchain. Use at your own risk. Always veri
 ---
 
 Built with ❤️ on Stacks blockchain
+
+## 📜 Smart Contract Overview
+
+The platform uses 10 optimized Clarity smart contracts:
+
+1. **game-core-v01.clar** – Manages game creation, state, and move validation.
+2. **board-generator-v01.clar** – Generates random mine boards using VRF and commitment schemes.
+3. **win-checker-v01.clar** – Validates win conditions for games.
+4. **leaderboard-v01.clar** – Tracks global player rankings for each difficulty level.
+5. **achievement-nft-v01.clar** – Implements SIP-009 NFT achievement badges for player accomplishments.
+6. **player-profile-v01.clar** – Stores player statistics and win streaks.
+7. **tournament-v01.clar** – Handles tournament brackets and progression.
+8. **wager-v01.clar** – Enables 1v1 betting and wager settlements between players.
+9. **daily-challenge-v01.clar** – Coordinates daily puzzles and rewards for all players.
+10. **economy-v01.clar** – Manages prize pools, reward distribution, and play-to-earn mechanics.
+
+Each contract is modular, focusing on a specific aspect of the game or platform economy. Contracts interact to provide a seamless decentralized gaming experience, including fair board generation, achievement tracking, competitive play, and rewards.
