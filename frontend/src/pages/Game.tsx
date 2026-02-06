@@ -10,8 +10,11 @@ export function Game() {
   const { startNewGame, resetGame, status, difficulty } = useGameStore();
   const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty>(Difficulty.BEGINNER);
 
-  const handleStartGame = () => {
-    startNewGame(selectedDifficulty);
+  const [loading, setLoading] = useState(false);
+  const handleStartGame = async () => {
+    setLoading(true);
+    await startNewGame(selectedDifficulty);
+    setLoading(false);
   };
 
   const handleReset = () => {
@@ -56,8 +59,8 @@ export function Game() {
               />
             </div>
 
-            <Button onClick={handleStartGame} className="w-full" size="lg">
-              Start Game
+            <Button onClick={handleStartGame} className="w-full" size="lg" disabled={loading}>
+              {loading ? 'Starting...' : 'Start Game'}
             </Button>
           </div>
         )}
