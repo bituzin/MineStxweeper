@@ -65,6 +65,31 @@ export function getUserAddress(): string | null {
 export function isAuthenticated(): boolean {
   return userSession.isUserSignedIn();
 }
+  // ============================================================================
+  // BOARD GENERATOR CONTRACT CALLS
+  // ============================================================================
+
+  export async function generateBoard(gameId: number, width: number, height: number) {
+    if (!userSession.isUserSignedIn()) throw new Error('Not authenticated');
+
+    await openContractCall({
+      contractAddress: CONTRACT_ADDRESS,
+      contractName: CONTRACT_NAME_BOARD_GEN,
+      functionName: 'generate-board',
+      functionArgs: [uintCV(gameId), uintCV(width), uintCV(height)],
+      network: NETWORK,
+      appDetails: {
+        name: 'Minesweeper on Stacks',
+        icon: window.location.origin + '/logo.png',
+      },
+      onFinish: (data: any) => {
+        console.log('Board generated:', data);
+      },
+      onCancel: () => {
+        console.log('Board generation canceled');
+      },
+    });
+  }
 
 // ============================================================================
 // GAME CORE CONTRACT CALLS
