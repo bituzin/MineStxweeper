@@ -71,8 +71,7 @@ export function isAuthenticated(): boolean {
 // ============================================================================
 
 export async function createGame(difficulty: number) {
-  const address = getUserAddress();
-  if (!address) throw new Error('Not authenticated');
+  if (!userSession.isUserSignedIn()) throw new Error('Not authenticated');
 
   const txOptions = {
     network: NETWORK,
@@ -81,14 +80,22 @@ export async function createGame(difficulty: number) {
     contractName: CONTRACT_NAME_GAME_CORE,
     functionName: 'create-game',
     functionArgs: [uintCV(difficulty)],
-    senderKey: userSession.loadUserData().appPrivateKey,
     postConditionMode: PostConditionMode.Allow,
+    appDetails: {
+      name: 'Minesweeper on Stacks',
+      icon: window.location.origin + '/logo.png',
+    },
+    onFinish: (data: any) => {
+      // Możesz tu obsłużyć powiadomienie lub pobranie gameId
+      console.log('Transaction submitted:', data);
+    },
+    onCancel: () => {
+      console.log('Transaction canceled');
+    },
+    userSession,
   };
 
-  const transaction = await makeContractCall(txOptions);
-  const broadcastResponse = await broadcastTransaction(transaction, NETWORK);
-  
-  return broadcastResponse.txid;
+  await makeContractCall(txOptions);
 }
 
 export async function revealCell(gameId: number, x: number, y: number) {
