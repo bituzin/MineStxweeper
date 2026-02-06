@@ -70,6 +70,7 @@ export function isAuthenticated(): boolean {
 // GAME CORE CONTRACT CALLS
 // ============================================================================
 
+export async function createGame(difficulty: number) {
   if (!userSession.isUserSignedIn()) throw new Error('Not authenticated');
 
   await openContractCall({
