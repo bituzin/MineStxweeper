@@ -17,7 +17,7 @@ import {
 const appConfig = new AppConfig(['store_write', 'publish_data']);
 export const userSession = new UserSession({ appConfig });
 
-export const NETWORK = new StacksTestnet(); // Change to StacksMainnet for production
+export const NETWORK = new StacksMainnet(); // Changed to StacksMainnet for production
 
 export const CONTRACT_ADDRESS = 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM'; // Update with deployed address
 export const CONTRACT_NAME_GAME_CORE = 'game-core';
