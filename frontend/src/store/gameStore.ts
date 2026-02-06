@@ -60,12 +60,15 @@ export const useGameStore = create<GameStore>((set, get) => ({
     try {
       // Wywołanie kontraktu na blockchainie
       const txid = await createGame(difficulty);
-      // Możesz tu dodać obsługę powiadomienia lub pobrania gameId po potwierdzeniu transakcji
-      // set({ gameId: ... });
-      // Możesz też dodać loading/spinner do UI
+      // Ustaw gameId na txid (placeholder, docelowo pobierz z blockchaina)
+      set({ gameId: txid });
       // Wywołanie generowania planszy przez kontrakt board-generator-02
-      const config = BOARD_CONFIGS[difficulty];
-      await generateBoard(1, config.width, config.height); // gameId=1 przykładowo, docelowo pobierz z blockchaina
+      await generateBoard(txid, config.width, config.height);
+      // Pobierz planszę z blockchaina (placeholder)
+      // const boardOnChain = await fetchBoard(txid);
+      // set({ board: boardOnChain });
+      // Na razie wyświetl lokalną planszę
+      set({ status: GameStatus.IN_PROGRESS });
     } catch (error) {
       // Obsługa błędów
       console.error('Failed to create game on chain:', error);

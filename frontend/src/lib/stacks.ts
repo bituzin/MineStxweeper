@@ -72,22 +72,26 @@ export function isAuthenticated(): boolean {
   export async function generateBoard(gameId: number, width: number, height: number) {
     if (!userSession.isUserSignedIn()) throw new Error('Not authenticated');
 
-    await openContractCall({
-      contractAddress: CONTRACT_ADDRESS,
-      contractName: CONTRACT_NAME_BOARD_GEN,
-      functionName: 'generate-board',
-      functionArgs: [uintCV(gameId), uintCV(width), uintCV(height)],
-      network: NETWORK,
-      appDetails: {
-        name: 'Minesweeper on Stacks',
-        icon: window.location.origin + '/logo.png',
-      },
-      onFinish: (data: any) => {
-        console.log('Board generated:', data);
-      },
-      onCancel: () => {
-        console.log('Board generation canceled');
-      },
+    return new Promise((resolve, reject) => {
+      openContractCall({
+        contractAddress: CONTRACT_ADDRESS,
+        contractName: CONTRACT_NAME_BOARD_GEN,
+        functionName: 'generate-board',
+        functionArgs: [uintCV(gameId), uintCV(width), uintCV(height)],
+        network: NETWORK,
+        appDetails: {
+          name: 'Minesweeper on Stacks',
+          icon: window.location.origin + '/logo.png',
+        },
+        onFinish: (data: any) => {
+          console.log('Board generated:', data);
+          resolve(data.txId);
+        },
+        onCancel: () => {
+          console.log('Board generation canceled');
+          reject('Board generation canceled');
+        },
+      });
     });
   }
 
@@ -98,22 +102,26 @@ export function isAuthenticated(): boolean {
 export async function createGame(difficulty: number) {
   if (!userSession.isUserSignedIn()) throw new Error('Not authenticated');
 
-  await openContractCall({
-    contractAddress: CONTRACT_ADDRESS,
-    contractName: CONTRACT_NAME_GAME_CORE,
-    functionName: 'create-game',
-    functionArgs: [uintCV(difficulty)],
-    network: NETWORK,
-    appDetails: {
-      name: 'Minesweeper on Stacks',
-      icon: window.location.origin + '/logo.png',
-    },
-    onFinish: (data: any) => {
-      console.log('Transaction submitted:', data);
-    },
-    onCancel: () => {
-      console.log('Transaction canceled');
-    },
+  return new Promise((resolve, reject) => {
+    openContractCall({
+      contractAddress: CONTRACT_ADDRESS,
+      contractName: CONTRACT_NAME_GAME_CORE,
+      functionName: 'create-game',
+      functionArgs: [uintCV(difficulty)],
+      network: NETWORK,
+      appDetails: {
+        name: 'Minesweeper on Stacks',
+        icon: window.location.origin + '/logo.png',
+      },
+      onFinish: (data: any) => {
+        console.log('Transaction submitted:', data);
+        resolve(data.txId);
+      },
+      onCancel: () => {
+        console.log('Transaction canceled');
+        reject('Transaction canceled');
+      },
+    });
   });
 }
 
