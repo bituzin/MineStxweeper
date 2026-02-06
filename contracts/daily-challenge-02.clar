@@ -105,6 +105,7 @@
       (var-set current-challenge-id new-id)
       (var-set last-challenge-date stacks-block-height)
       
+      (print {event: "generate-daily-challenge", challenge-id: new-id, difficulty: difficulty})
       (ok new-id)
     )
   )
@@ -120,7 +121,7 @@
     (
       (challenge (unwrap! (map-get? daily-challenges {challenge-id: challenge-id}) ERR_NOT_FOUND))
       ;; Get game information
-      (game (unwrap! (contract-call? .game-core-01 get-game-info game-id) ERR_NOT_FOUND))
+      (game (unwrap! (contract-call? .game-core-02 get-game-info game-id) ERR_NOT_FOUND))
       (player (get player game))
       (time (default-to u0 (get final-time game)))
       (score (default-to u0 (get final-score game)))
@@ -172,6 +173,7 @@
     ;; Update player streak
     (unwrap-panic (update-daily-streak player))
     
+    (print {event: "complete-daily-challenge", challenge-id: challenge-id, player: player, game-id: game-id, time: time, score: score})
     (ok true)
   )
 )
@@ -208,7 +210,7 @@
         ;; Award achievement for 30-day streak
         (begin
           (and (is-eq new-streak u30)
-               (is-ok (contract-call? .achievement-nft-01 award-achievement player u15)))
+               (is-ok (contract-call? .achievement-nft-02 award-achievement player u15)))
           (ok true)
         )
       )
@@ -267,8 +269,9 @@
       )
       
       ;; Add rewards via economy contract
-      (unwrap-panic (contract-call? .economy-01 add-rewards tx-sender total-reward u0))
+      (unwrap-panic (contract-call? .economy-02 add-rewards tx-sender total-reward u0))
       
+      (print {event: "claim-daily-reward", challenge-id: challenge-id, player: tx-sender, reward: total-reward})
       (ok total-reward)
     )
   )
