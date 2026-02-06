@@ -63,6 +63,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
       // Możesz tu dodać obsługę powiadomienia lub pobrania gameId po potwierdzeniu transakcji
       // set({ gameId: ... });
       // Możesz też dodać loading/spinner do UI
+      // Wywołanie generowania planszy przez kontrakt board-generator-02
+      const config = BOARD_CONFIGS[difficulty];
+      await generateBoard(1, config.width, config.height); // gameId=1 przykładowo, docelowo pobierz z blockchaina
     } catch (error) {
       // Obsługa błędów
       console.error('Failed to create game on chain:', error);
