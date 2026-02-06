@@ -19,8 +19,8 @@ export const userSession = new UserSession({ appConfig });
 
 export const NETWORK = new StacksMainnet(); // Changed to StacksMainnet for production
 
-export const CONTRACT_ADDRESS = 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM'; // Update with deployed address
-export const CONTRACT_NAME_GAME_CORE = 'game-core';
+export const CONTRACT_ADDRESS = 'SP2Z3M34KEKC79TMRMZB24YG30FE25JPN83TPZSZ2'; // Updated to deployed game-core-02 address
+export const CONTRACT_NAME_GAME_CORE = 'game-core-02';
 export const CONTRACT_NAME_BOARD_GEN = 'board-generator';
 export const CONTRACT_NAME_WIN_CHECKER = 'win-checker';
 export const CONTRACT_NAME_LEADERBOARD = 'leaderboard';
