@@ -18,6 +18,7 @@ import {
   countFlags,
   countRevealedCells,
 } from '@/lib/game-logic';
+import { createGame, generateBoard } from '@/lib/stacks';
 
 interface GameStore extends GameState {
   // Actions
@@ -39,7 +40,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   timeElapsed: 0,
 
   // Start new game
-  startNewGame: (difficulty) => {
+  startNewGame: async (difficulty) => {
     const config = BOARD_CONFIGS[difficulty];
     const board = createEmptyBoard(config.width, config.height);
 
@@ -55,6 +56,22 @@ export const useGameStore = create<GameStore>((set, get) => ({
       finishedAt: undefined,
       gameId: undefined,
     });
+
+    try {
+      // Wywołanie kontraktu na blockchainie
+      const txid = await createGame(difficulty);
+      // Ustaw gameId na txid (placeholder, docelowo pobierz z blockchaina)
+      set({ gameId: txid, status: GameStatus.IN_PROGRESS, startedAt: Date.now() });
+      // Wywołanie generowania planszy przez kontrakt board-generator-02
+      await generateBoard(txid, config.width, config.height);
+      // Pobierz planszę z blockchaina (placeholder)
+      // const boardOnChain = await fetchBoard(txid);
+      // set({ board: boardOnChain });
+      console.log('Game created on chain, ready to play!');
+    } catch (error) {
+      // Obsługa błędów
+      console.error('Failed to create game on chain:', error);
+    }
   },
 
   // Handle left click
@@ -76,12 +93,15 @@ export const useGameStore = create<GameStore>((set, get) => ({
     let newStatus = state.status;
     let startedAt = state.startedAt;
 
-    // First move - place mines and start timer
-    if (state.status === GameStatus.NOT_STARTED) {
+    // First move - place mines if board doesn't have any yet
+    const hasMines = newBoard.some(row => row.some(cell => cell.isMine));
+    if (!hasMines) {
       const config = BOARD_CONFIGS[state.difficulty];
       newBoard = placeMines(newBoard, config.mines, x, y);
-      newStatus = GameStatus.IN_PROGRESS;
-      startedAt = Date.now();
+      if (state.status === GameStatus.NOT_STARTED) {
+        newStatus = GameStatus.IN_PROGRESS;
+        startedAt = Date.now();
+      }
     }
 
     // Check if mine

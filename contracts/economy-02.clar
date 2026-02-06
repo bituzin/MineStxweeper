@@ -71,7 +71,7 @@
   (let
     (
       ;; Get game information
-      (game (unwrap! (contract-call? .game-core-01 get-game-info game-id) ERR_NOT_AUTHORIZED))
+      (game (unwrap! (contract-call? .game-core-02 get-game-info game-id) ERR_NOT_AUTHORIZED))
       (player (get player game))
       (won (is-eq (get status game) "won"))
       (difficulty (get difficulty game))
@@ -86,12 +86,12 @@
       
       ;; Difficulty multiplier
       (diff-mult (if (is-eq difficulty u1) u1 (if (is-eq difficulty u2) u2 u4)))
-      
+     
       ;; Speed bonus (max 100 tokens)
       (speed-bonus (if (< time u100) (- u100 time) u0))
       
       ;; Get win streak multiplier from player profile
-      (streak-mult (contract-call? .player-profile-01 get-streak-multiplier player))
+      (streak-mult (contract-call? .player-profile-02 get-streak-multiplier player))
       
       ;; Calculate total
       (subtotal (+ (+ base win-bonus) speed-bonus))
@@ -101,6 +101,7 @@
     ;; Add to pending rewards
     (begin
       (add-pending-rewards player final-tokens u0)
+      (print {event: "calculate-rewards", game-id: game-id, player: player, tokens: final-tokens, won: won, difficulty: difficulty})
       (ok final-tokens)
     )
   )
@@ -133,6 +134,7 @@
 (define-public (add-rewards (player principal) (tokens uint) (stx uint))
   (begin
     (add-pending-rewards player tokens stx)
+    (print {event: "add-rewards", player: player, tokens: tokens, stx: stx})
     (ok true)
   )
 )
@@ -145,6 +147,7 @@
     )
     (begin
       (add-pending-rewards player bonus u0)
+      (print {event: "award-achievement-bonus", player: player, achievement-id: achievement-id, bonus: bonus})
       (ok bonus)
     )
   )
@@ -211,6 +214,7 @@
     ;; Update totals
     (var-set total-rewards-distributed (+ (var-get total-rewards-distributed) tokens))
     
+    (print {event: "claim-rewards", player: player, tokens: tokens, stx: stx})
     (ok {tokens: tokens, stx: stx})
   )
 )
@@ -231,6 +235,7 @@
       {pool-id: pool-id, player: player}
       {locked-amount: amount}
     )
+    (print {event: "lock-funds", pool-id: pool-id, player: player, amount: amount})
     (ok true)
   )
 )
@@ -265,6 +270,7 @@
         (merge pool {distributed: true})
       )
       
+      (print {event: "release-funds", pool-id: pool-id, winner: winner, amount: amount, net-amount: net-amount, fee: fee})
       (ok net-amount)
     )
   )
@@ -282,6 +288,7 @@
     ;; Clear escrow
     (map-delete escrow-balances {pool-id: pool-id, player: player})
     
+    (print {event: "refund-funds", pool-id: pool-id, player: player, amount: amount})
     (ok amount)
   )
 )

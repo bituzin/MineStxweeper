@@ -93,6 +93,7 @@
     )
     
     (var-set tournament-id-nonce tournament-id)
+    (print {event: "create-tournament", tournament-id: tournament-id, name: name, organizer: tx-sender, difficulty: difficulty, entry-fee: entry-fee, max-players: max-players})
     (ok tournament-id)
   )
 )
@@ -112,7 +113,7 @@
     (asserts! (< (get current-players tournament) (get max-players tournament)) ERR_TOURNAMENT_FULL)
     
     ;; Lock entry fee in economy contract
-    (unwrap! (contract-call? .economy-01 lock-funds tournament-id entry-fee) ERR_INSUFFICIENT_FUNDS)
+    (unwrap! (contract-call? .economy-02 lock-funds tournament-id entry-fee) ERR_INSUFFICIENT_FUNDS)
     
     ;; Add participant
     (map-set tournament-participants
@@ -138,7 +139,10 @@
     ;; Check if tournament is full - auto-start
     (if (is-eq (+ (get current-players tournament) u1) (get max-players tournament))
       (start-tournament tournament-id)
-      (ok true)
+      (begin
+        (print {event: "join-tournament", tournament-id: tournament-id, player: tx-sender, entry-fee: entry-fee})
+        (ok true)
+      )
     )
   )
 )
@@ -179,6 +183,7 @@
           board-seed: seed
         }
       )
+      (print {event: "start-tournament", tournament-id: tournament-id, current-players: (get current-players tournament)})
       (ok true)
     )
   )
@@ -190,7 +195,7 @@
     (
       (tournament (unwrap! (map-get? tournaments {tournament-id: tournament-id}) ERR_NOT_FOUND))
       ;; Get game info from game-core
-      (game (unwrap! (contract-call? .game-core-01 get-game-info game-id) ERR_NOT_FOUND))
+      (game (unwrap! (contract-call? .game-core-02 get-game-info game-id) ERR_NOT_FOUND))
       (participant (unwrap! (map-get? tournament-participants {tournament-id: tournament-id, player: tx-sender}) ERR_NOT_AUTHORIZED))
     )
     ;; Validate
@@ -206,6 +211,7 @@
       })
     )
     
+    (print {event: "submit-tournament-result", tournament-id: tournament-id, player: tx-sender, game-id: game-id})
     (ok true)
   )
 )
@@ -233,6 +239,7 @@
     ;; Distribute prizes (simplified - in production, calculate rankings)
     ;; 1st place: 50%, 2nd: 30%, 3rd: 10%, 4th: 5%, platform: 5%
     
+    (print {event: "finalize-tournament", tournament-id: tournament-id, prize-pool: prize-pool})
     (ok true)
   )
 )

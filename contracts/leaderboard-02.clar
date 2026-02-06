@@ -65,7 +65,7 @@
   (let
     (
       ;; Get game info from game-core
-      (game (unwrap! (contract-call? .game-core-01 get-game-info game-id) ERR_NOT_FOUND))
+      (game (unwrap! (contract-call? .game-core-02 get-game-info game-id) ERR_NOT_FOUND))
       (time (default-to u0 (get final-time game)))
       (current-size (default-to u0 (get size (map-get? leaderboard-sizes {difficulty: difficulty}))))
       (player-best (map-get? player-best-scores {player: player, difficulty: difficulty}))
@@ -101,6 +101,7 @@
     ;; Check world record
     (try! (check-world-record difficulty player score time game-id))
     
+    (print {event: "submit-score", game-id: game-id, player: player, difficulty: difficulty, score: score, time: time})
     (ok true)
   )
 )
@@ -133,7 +134,7 @@
             }
           )
           ;; Award world record achievement
-          (try! (contract-call? .achievement-nft-01 award-achievement player u12))
+          (try! (contract-call? .achievement-nft-02 award-achievement player u12))
           (ok true)
         )
         (ok false)

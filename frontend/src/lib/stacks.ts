@@ -1,7 +1,7 @@
 import { AppConfig, UserSession, showConnect } from '@stacks/connect';
 import { StacksMainnet, StacksTestnet } from '@stacks/network';
+import { openContractCall } from '@stacks/connect';
 import {
-  makeContractCall,
   broadcastTransaction,
   AnchorMode,
   PostConditionMode,
@@ -17,10 +17,10 @@ import {
 const appConfig = new AppConfig(['store_write', 'publish_data']);
 export const userSession = new UserSession({ appConfig });
 
-export const NETWORK = new StacksTestnet(); // Change to StacksMainnet for production
+export const NETWORK = new StacksMainnet(); // Changed to StacksMainnet for production
 
-export const CONTRACT_ADDRESS = 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM'; // Update with deployed address
-export const CONTRACT_NAME_GAME_CORE = 'game-core';
+export const CONTRACT_ADDRESS = 'SP2Z3M34KEKC79TMRMZB24YG30FE25JPN83TPZSZ2'; // Updated to deployed game-core-02 address
+export const CONTRACT_NAME_GAME_CORE = 'game-core-02';
 export const CONTRACT_NAME_BOARD_GEN = 'board-generator';
 export const CONTRACT_NAME_WIN_CHECKER = 'win-checker';
 export const CONTRACT_NAME_LEADERBOARD = 'leaderboard';
@@ -57,7 +57,7 @@ export function disconnectWallet() {
 
 export function getUserAddress(): string | null {
   if (userSession.isUserSignedIn()) {
-    return userSession.loadUserData().profile.stxAddress.testnet; // or .mainnet
+    return userSession.loadUserData().profile.stxAddress.mainnet; // switched to mainnet
   }
   return null;
 }
@@ -65,30 +65,64 @@ export function getUserAddress(): string | null {
 export function isAuthenticated(): boolean {
   return userSession.isUserSignedIn();
 }
+  // ============================================================================
+  // BOARD GENERATOR CONTRACT CALLS
+  // ============================================================================
+
+  export async function generateBoard(gameId: number, width: number, height: number) {
+    if (!userSession.isUserSignedIn()) throw new Error('Not authenticated');
+
+    return new Promise((resolve, reject) => {
+      openContractCall({
+        contractAddress: CONTRACT_ADDRESS,
+        contractName: CONTRACT_NAME_BOARD_GEN,
+        functionName: 'generate-board',
+        functionArgs: [uintCV(gameId), uintCV(width), uintCV(height)],
+        network: NETWORK,
+        appDetails: {
+          name: 'Minesweeper on Stacks',
+          icon: window.location.origin + '/logo.png',
+        },
+        onFinish: (data: any) => {
+          console.log('Board generated:', data);
+          resolve(data.txId);
+        },
+        onCancel: () => {
+          console.log('Board generation canceled');
+          reject('Board generation canceled');
+        },
+      });
+    });
+  }
 
 // ============================================================================
 // GAME CORE CONTRACT CALLS
 // ============================================================================
 
 export async function createGame(difficulty: number) {
-  const address = getUserAddress();
-  if (!address) throw new Error('Not authenticated');
+  if (!userSession.isUserSignedIn()) throw new Error('Not authenticated');
 
-  const txOptions = {
-    network: NETWORK,
-    anchorMode: AnchorMode.Any,
-    contractAddress: CONTRACT_ADDRESS,
-    contractName: CONTRACT_NAME_GAME_CORE,
-    functionName: 'create-game',
-    functionArgs: [uintCV(difficulty)],
-    senderKey: userSession.loadUserData().appPrivateKey,
-    postConditionMode: PostConditionMode.Allow,
-  };
-
-  const transaction = await makeContractCall(txOptions);
-  const broadcastResponse = await broadcastTransaction(transaction, NETWORK);
-  
-  return broadcastResponse.txid;
+  return new Promise((resolve, reject) => {
+    openContractCall({
+      contractAddress: CONTRACT_ADDRESS,
+      contractName: CONTRACT_NAME_GAME_CORE,
+      functionName: 'create-game',
+      functionArgs: [uintCV(difficulty)],
+      network: NETWORK,
+      appDetails: {
+        name: 'Minesweeper on Stacks',
+        icon: window.location.origin + '/logo.png',
+      },
+      onFinish: (data: any) => {
+        console.log('Transaction submitted:', data);
+        resolve(data.txId);
+      },
+      onCancel: () => {
+        console.log('Transaction canceled');
+        reject('Transaction canceled');
+      },
+    });
+  });
 }
 
 export async function revealCell(gameId: number, x: number, y: number) {
