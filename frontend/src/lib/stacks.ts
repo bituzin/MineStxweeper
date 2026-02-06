@@ -57,7 +57,7 @@ export function disconnectWallet() {
 
 export function getUserAddress(): string | null {
   if (userSession.isUserSignedIn()) {
-    return userSession.loadUserData().profile.stxAddress.testnet; // or .mainnet
+    return userSession.loadUserData().profile.stxAddress.mainnet; // switched to mainnet
   }
   return null;
 }
