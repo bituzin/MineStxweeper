@@ -1,7 +1,7 @@
 import { AppConfig, UserSession, showConnect } from '@stacks/connect';
 import { StacksMainnet, StacksTestnet } from '@stacks/network';
+import { openContractCall } from '@stacks/connect';
 import {
-  makeContractCall,
   broadcastTransaction,
   AnchorMode,
   PostConditionMode,
@@ -70,27 +70,25 @@ export function isAuthenticated(): boolean {
 // GAME CORE CONTRACT CALLS
 // ============================================================================
 
-export async function createGame(difficulty: number) {
   if (!userSession.isUserSignedIn()) throw new Error('Not authenticated');
 
-  const txOptions = {
-    network: NETWORK,
-    anchorMode: AnchorMode.Any,
+  await openContractCall({
     contractAddress: CONTRACT_ADDRESS,
     contractName: CONTRACT_NAME_GAME_CORE,
     functionName: 'create-game',
     functionArgs: [uintCV(difficulty)],
-    postConditionMode: PostConditionMode.Allow,
-    userSession,
+    network: NETWORK,
+    appDetails: {
+      name: 'Minesweeper on Stacks',
+      icon: window.location.origin + '/logo.png',
+    },
     onFinish: (data: any) => {
       console.log('Transaction submitted:', data);
     },
     onCancel: () => {
       console.log('Transaction canceled');
     },
-  };
-
-  await makeContractCall(txOptions);
+  });
 }
 
 export async function revealCell(gameId: number, x: number, y: number) {
