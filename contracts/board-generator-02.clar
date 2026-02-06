@@ -83,6 +83,7 @@
       }
     )
     
+    (print {event: "generate-board", game-id: game-id, width: width, height: height, mine-count: mine-count})
     (ok commitment)
   )
 )
@@ -97,7 +98,10 @@
     )
     ;; Check cache first
     (match cached
-      cached-value (ok (get is-mine cached-value))
+      cached-value (begin
+        (print {event: "is-cell-mine", game-id: game-id, cell-index: cell-index, is-mine: (get is-mine cached-value), cached: true})
+        (ok (get is-mine cached-value))
+      )
       ;; Not cached - compute and cache
       (let
         (
@@ -108,6 +112,7 @@
           { game-id: game-id, cell-index: cell-index }
           { is-mine: is-mine }
         )
+        (print {event: "is-cell-mine", game-id: game-id, cell-index: cell-index, is-mine: is-mine, cached: false})
         (ok is-mine)
       )
     )
@@ -209,6 +214,7 @@
               (+ c7 (if (check-cell-mine game-id (coords-to-index (+ x u1) (+ y u1) width)) u1 u0)) 
               c7))
     )
+    (print {event: "count-adjacent-mines", game-id: game-id, x: x, y: y, count: c8})
     (ok c8)
   )
 )
@@ -236,6 +242,7 @@
     ;; In production, would compute and store all mine positions
     ;; For now, mines are computed on-demand via is-cell-mine
     
+    (print {event: "reveal-board", game-id: game-id})
     (ok true)
   )
 )
