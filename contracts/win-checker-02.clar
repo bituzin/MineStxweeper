@@ -21,9 +21,9 @@
   (let
     (
       ;; Get game information
-      (game (unwrap! (contract-call? .game-core-01 get-game-info game-id) ERR_GAME_NOT_FOUND))
+      (game (unwrap! (contract-call? .game-core-02 get-game-info game-id) ERR_GAME_NOT_FOUND))
       ;; Get game statistics
-      (stats (unwrap! (contract-call? .game-core-01 get-game-stats game-id) ERR_GAME_NOT_FOUND))
+      (stats (unwrap! (contract-call? .game-core-02 get-game-stats game-id) ERR_GAME_NOT_FOUND))
       (cells-revealed (get cells-revealed stats))
       (safe-cells (get safe-cells stats))
     )
@@ -34,18 +34,22 @@
           (final-score (unwrap-panic (calculate-score game-id)))
         )
         ;; Mark game as won in game-core
-        (try! (contract-call? .game-core-01 mark-game-won game-id final-score))
+        (try! (contract-call? .game-core-02 mark-game-won game-id final-score))
         
         ;; Update player statistics
-        (try! (contract-call? .player-profile-01 update-win-stats (get player game) game-id (get difficulty game)))
+        (try! (contract-call? .player-profile-02 update-win-stats (get player game) game-id (get difficulty game)))
         ;; Submit score to leaderboard
-        (try! (contract-call? .leaderboard-01 submit-score game-id (get player game) (get difficulty game) final-score))
+        (try! (contract-call? .leaderboard-02 submit-score game-id (get player game) (get difficulty game) final-score))
         ;; Calculate and award rewards
-        (try! (contract-call? .economy-01 calculate-rewards game-id))
+        (try! (contract-call? .economy-02 calculate-rewards game-id))
         
+        (print {event: "check-win-condition", game-id: game-id, won: true, final-score: final-score})
         (ok true)
       )
-      (ok false)
+      (begin
+        (print {event: "check-win-condition", game-id: game-id, won: false})
+        (ok false)
+      )
     )
   )
 )
@@ -59,9 +63,9 @@
   (let
     (
       ;; Get game information
-      (game (unwrap! (contract-call? .game-core-01 get-game-info game-id) ERR_GAME_NOT_FOUND))
+      (game (unwrap! (contract-call? .game-core-02 get-game-info game-id) ERR_GAME_NOT_FOUND))
       ;; Get game statistics
-      (stats (unwrap! (contract-call? .game-core-01 get-game-stats game-id) ERR_GAME_NOT_FOUND))
+      (stats (unwrap! (contract-call? .game-core-02 get-game-stats game-id) ERR_GAME_NOT_FOUND))
       (time-elapsed (default-to u0 (get final-time game)))
       (difficulty (get difficulty game))
       
@@ -89,6 +93,7 @@
       ;; Final score
       (final (* subtotal multiplier))
     )
+    (print {event: "calculate-score", game-id: game-id, score: final, difficulty: difficulty})
     (ok final)
   )
 )
@@ -161,7 +166,7 @@
 ;; Check if game is won
 (define-read-only (is-game-won (game-id uint))
   ;; Get game status from game-core
-  (match (contract-call? .game-core-01 get-game-info game-id)
+  (match (contract-call? .game-core-02 get-game-info game-id)
     game (is-eq (get status game) "won")
     false
   )
