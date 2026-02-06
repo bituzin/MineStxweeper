@@ -18,6 +18,7 @@ import {
   countFlags,
   countRevealedCells,
 } from '@/lib/game-logic';
+import { createGame } from '@/lib/stacks';
 
 interface GameStore extends GameState {
   // Actions
@@ -39,7 +40,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   timeElapsed: 0,
 
   // Start new game
-  startNewGame: (difficulty) => {
+  startNewGame: async (difficulty) => {
     const config = BOARD_CONFIGS[difficulty];
     const board = createEmptyBoard(config.width, config.height);
 
@@ -55,6 +56,17 @@ export const useGameStore = create<GameStore>((set, get) => ({
       finishedAt: undefined,
       gameId: undefined,
     });
+
+    try {
+      // Wywołanie kontraktu na blockchainie
+      const txid = await createGame(difficulty);
+      // Możesz tu dodać obsługę powiadomienia lub pobrania gameId po potwierdzeniu transakcji
+      // set({ gameId: ... });
+      // Możesz też dodać loading/spinner do UI
+    } catch (error) {
+      // Obsługa błędów
+      console.error('Failed to create game on chain:', error);
+    }
   },
 
   // Handle left click
