@@ -61,7 +61,7 @@
       (wager-id (+ (var-get wager-id-nonce) u1))
     )
     ;; Lock challenger stake in economy
-    (unwrap! (contract-call? .economy-01 lock-funds wager-id stake) ERR_NOT_AUTHORIZED)
+    (unwrap! (contract-call? .economy-02 lock-funds wager-id stake) ERR_NOT_AUTHORIZED)
     
     ;; Create wager
     (map-set wagers
@@ -87,6 +87,7 @@
     )
     
     (var-set wager-id-nonce wager-id)
+    (print {event: "create-wager", wager-id: wager-id, challenger: tx-sender, opponent: opponent, difficulty: difficulty, stake: stake})
     (ok wager-id)
   )
 )
@@ -107,7 +108,7 @@
     (asserts! (< stacks-block-height (get expires-at wager)) ERR_WAGER_EXPIRED)
     
     ;; Lock opponent stake in economy
-    (unwrap! (contract-call? .economy-01 lock-funds wager-id stake) ERR_NOT_AUTHORIZED)
+    (unwrap! (contract-call? .economy-02 lock-funds wager-id stake) ERR_NOT_AUTHORIZED)
     
     ;; Generate shared board seed
     (let
@@ -125,6 +126,7 @@
           board-seed: (some seed)
         })
       )
+      (print {event: "accept-wager", wager-id: wager-id, opponent: tx-sender, seed: seed})
       (ok seed)
     )
   )
@@ -139,7 +141,7 @@
     (
       (wager (unwrap! (map-get? wagers {wager-id: wager-id}) ERR_NOT_FOUND))
       ;; Get game information
-      (game (unwrap! (contract-call? .game-core-01 get-game-info game-id) ERR_NOT_FOUND))
+      (game (unwrap! (contract-call? .game-core-02 get-game-info game-id) ERR_NOT_FOUND))
       (is-challenger (is-eq tx-sender (get challenger wager)))
       (is-opponent (is-eq tx-sender (get opponent wager)))
     )
@@ -179,9 +181,13 @@
         ;; Both completed - determine winner
         (begin
           (unwrap-panic (determine-wager-winner wager-id))
+          (print {event: "submit-wager-result", wager-id: wager-id, player: tx-sender, game-id: game-id})
           (ok true)
         )
-        (ok true)
+        (begin
+          (print {event: "submit-wager-result", wager-id: wager-id, player: tx-sender, game-id: game-id})
+          (ok true)
+        )
       )
     )
   )
@@ -211,11 +217,11 @@
     )
     
     ;; Distribute prize to winner via economy
-    (unwrap! (contract-call? .economy-01 release-funds wager-id winner total-pot) ERR_NOT_AUTHORIZED)
+    (unwrap! (contract-call? .economy-02 release-funds wager-id winner total-pot) ERR_NOT_AUTHORIZED)
     
     ;; Award achievement for high stakes
     (and (> (get stake wager) u100)
-         (is-ok (contract-call? .achievement-nft-01 award-achievement winner u14)))
+         (is-ok (contract-call? .achievement-nft-02 award-achievement winner u14)))
     
     (ok winner)
   )
@@ -235,7 +241,7 @@
     (asserts! (is-eq (get status wager) "pending") ERR_NOT_AUTHORIZED)
     
     ;; Refund stake via economy
-    (unwrap! (contract-call? .economy-01 refund-funds wager-id) ERR_NOT_AUTHORIZED)
+    (unwrap! (contract-call? .economy-02 refund-funds wager-id) ERR_NOT_AUTHORIZED)
     
     ;; Update status
     (map-set wagers
@@ -243,6 +249,7 @@
       (merge wager {status: "cancelled"})
     )
     
+    (print {event: "cancel-wager", wager-id: wager-id, challenger: tx-sender})
     (ok true)
   )
 )
