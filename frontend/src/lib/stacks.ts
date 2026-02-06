@@ -81,18 +81,13 @@ export async function createGame(difficulty: number) {
     functionName: 'create-game',
     functionArgs: [uintCV(difficulty)],
     postConditionMode: PostConditionMode.Allow,
-    appDetails: {
-      name: 'Minesweeper on Stacks',
-      icon: window.location.origin + '/logo.png',
-    },
+    userSession,
     onFinish: (data: any) => {
-      // Możesz tu obsłużyć powiadomienie lub pobranie gameId
       console.log('Transaction submitted:', data);
     },
     onCancel: () => {
       console.log('Transaction canceled');
     },
-    userSession,
   };
 
   await makeContractCall(txOptions);
