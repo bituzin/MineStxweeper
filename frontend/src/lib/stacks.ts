@@ -19,17 +19,17 @@ export const userSession = new UserSession({ appConfig });
 
 export const NETWORK = new StacksMainnet(); // Changed to StacksMainnet for production
 
-export const CONTRACT_ADDRESS = 'SP2Z3M34KEKC79TMRMZB24YG30FE25JPN83TPZSZ2'; // Updated to deployed game-core-02 address
-export const CONTRACT_NAME_GAME_CORE = 'game-core-02';
-export const CONTRACT_NAME_BOARD_GEN = 'board-generator';
-export const CONTRACT_NAME_WIN_CHECKER = 'win-checker';
-export const CONTRACT_NAME_LEADERBOARD = 'leaderboard';
-export const CONTRACT_NAME_PLAYER_PROFILE = 'player-profile';
-export const CONTRACT_NAME_ACHIEVEMENT = 'achievement-nft';
-export const CONTRACT_NAME_TOURNAMENT = 'tournament';
+export const CONTRACT_ADDRESS = 'SP2Z3M34KEKC79TMRMZB24YG30FE25JPN83TPZSZ2'; // Updated to deployed game-core-03 address
+export const CONTRACT_NAME_GAME_CORE = 'game-core-03';
+export const CONTRACT_NAME_BOARD_GEN = 'board-generator-03';
+export const CONTRACT_NAME_WIN_CHECKER = 'win-checker-03';
+export const CONTRACT_NAME_LEADERBOARD = 'leaderboard-03';
+export const CONTRACT_NAME_PLAYER_PROFILE = 'player-profile-03';
+export const CONTRACT_NAME_ACHIEVEMENT = 'achievement-nft-03';
+export const CONTRACT_NAME_TOURNAMENT = 'tournament-03';
 export const CONTRACT_NAME_WAGER = 'wager-03';
-export const CONTRACT_NAME_DAILY = 'daily-challenge';
-export const CONTRACT_NAME_ECONOMY = 'economy';
+export const CONTRACT_NAME_DAILY = 'daily-challenge-03';
+export const CONTRACT_NAME_ECONOMY = 'economy-03';
 
 // ============================================================================
 // AUTHENTICATION
