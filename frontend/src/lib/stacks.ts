@@ -27,7 +27,7 @@ export const CONTRACT_NAME_LEADERBOARD = 'leaderboard';
 export const CONTRACT_NAME_PLAYER_PROFILE = 'player-profile';
 export const CONTRACT_NAME_ACHIEVEMENT = 'achievement-nft';
 export const CONTRACT_NAME_TOURNAMENT = 'tournament';
-export const CONTRACT_NAME_WAGER = 'wager';
+export const CONTRACT_NAME_WAGER = 'wager-03';
 export const CONTRACT_NAME_DAILY = 'daily-challenge';
 export const CONTRACT_NAME_ECONOMY = 'economy';
 
