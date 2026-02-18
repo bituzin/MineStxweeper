@@ -6,7 +6,6 @@ import { Modal } from '@/components/ui/Modal';
 
 export function Profile() {
   const [modal, setModal] = useState<{ open: boolean; message: string }>({ open: false, message: '' });
-  const [pending, setPending] = useState<{ tokens: number; stx: number } | null>(null);
 
   useEffect(() => {
     async function fetchPending() {
@@ -49,8 +48,6 @@ export function Profile() {
                 <p className="text-gray-400 font-mono">ST1PQHQKV0...TPGZGM</p>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-yellow-400">{pending ? pending.tokens : '...'}</div>
-                <div className="text-gray-400">Pending Tokens</div>
                 <Button size="sm" className="mt-2" onClick={async () => {
                   try {
                     await claimRewards();
