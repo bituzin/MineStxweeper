@@ -223,6 +223,27 @@ export async function getLeaderboard(difficulty: number, limit: number) {
   return [];
 }
 
+export async function getPendingRewards(playerAddress: string) {
+  // Read-only call to economy-03.get-pending-rewards
+  // You need to use Stacks.js or fetch from API
+  // Example placeholder:
+  return fetch(
+    `https://stacks-node-api.mainnet.stacks.co/v2/contracts/call-read/${CONTRACT_ADDRESS}/economy-03/get-pending-rewards`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        sender: playerAddress,
+        arguments: [
+          { type: 'principal', value: playerAddress }
+        ]
+      })
+    }
+  )
+    .then(res => res.json())
+    .then(data => data.result);
+}
+
 // ============================================================================
 // TOURNAMENT CONTRACT CALLS
 // ============================================================================

@@ -1,8 +1,26 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { claimRewards, getPendingRewards, getUserAddress } from '@/lib/stacks';
 import { User, Trophy, Flame, Award, Star } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
+import { Modal } from '@/components/ui/Modal';
 
 export function Profile() {
+  const [modal, setModal] = useState<{ open: boolean; message: string }>({ open: false, message: '' });
+
+  useEffect(() => {
+    async function fetchPending() {
+      const address = getUserAddress();
+      if (!address) return;
+      const result = await getPendingRewards(address);
+      if (result && result.platform_tokens !== undefined) {
+        setPending({ tokens: Number(result.platform_tokens), stx: Number(result.stx_amount) });
+      } else {
+        setPending({ tokens: 0, stx: 0 });
+      }
+    }
+    fetchPending();
+  }, []);
+
   // Mock player data
   const stats = {
     totalGames: 156,
@@ -30,9 +48,19 @@ export function Profile() {
                 <p className="text-gray-400 font-mono">ST1PQHQKV0...TPGZGM</p>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-yellow-400">{stats.totalTokens}</div>
-                <div className="text-gray-400">Tokens</div>
-                <Button size="sm" className="mt-2">Claim Rewards</Button>
+                <Button size="sm" className="mt-2" onClick={async () => {
+                  try {
+                    await claimRewards();
+                    setModal({ open: true, message: 'Nagrody zostały odebrane!' });
+                  } catch (e: any) {
+                    if (typeof e?.message === 'string' && e.message.includes('u701')) {
+                      setModal({ open: true, message: 'Nie masz żadnych nagród do odebrania.' });
+                    } else {
+                      setModal({ open: true, message: 'Failed to claim rewards' });
+                    }
+                  }
+                }}>Claim Rewards</Button>
+                <Modal open={modal.open} message={modal.message} onClose={() => setModal({ open: false, message: '' })} />
               </div>
             </div>
           </div>

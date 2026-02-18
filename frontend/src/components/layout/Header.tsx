@@ -18,6 +18,10 @@ export function Header() {
               <Bomb size={20} />
               <span>Play</span>
             </Link>
+            <Link to="/gm" className="flex items-center gap-2 hover:text-primary-400 transition">
+              <Sword size={20} />
+              <span>Gm</span>
+            </Link>
             <Link to="/leaderboard" className="flex items-center gap-2 hover:text-primary-400 transition">
               <Trophy size={20} />
               <span>Leaderboard</span>

@@ -133,7 +133,7 @@
     (var-set last-token-id new-token-id)
     
     ;; Award achievement bonus via economy contract
-    (unwrap! (contract-call? .economy-02 award-achievement-bonus player achievement-id) ERR_NOT_AUTHORIZED)
+    (unwrap! (contract-call? .economy-03 award-achievement-bonus player achievement-id) ERR_NOT_AUTHORIZED)
     
     (print {event: "award-achievement", player: player, achievement-id: achievement-id, token-id: new-token-id})
     (ok new-token-id)

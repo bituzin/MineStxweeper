@@ -23,6 +23,14 @@ export default {
           red: '#ef4444',
           orange: '#f97316',
           yellow: '#eab308',
+        },
+        stacks: {
+          purple: '#5546FF', // Stacks purple
+          dark: '#1A1A2E',   // Stacks dark gray
+          light: '#F5F6FA',  // Stacks light gray
+          white: '#FFFFFF',  // Stacks white
+          gradient1: '#5546FF',
+          gradient2: '#7B6FFF',
         }
       },
       animation: {
@@ -39,6 +47,9 @@ export default {
           '50%': { transform: 'scale(1.5)', backgroundColor: '#ef4444' },
           '100%': { transform: 'scale(1)' },
         }
+      },
+      fontFamily: {
+        army: ['"Special Elite"', 'monospace', 'sans-serif'],
       }
     },
   },
