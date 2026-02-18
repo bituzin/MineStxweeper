@@ -47,6 +47,9 @@ export default {
           '50%': { transform: 'scale(1.5)', backgroundColor: '#ef4444' },
           '100%': { transform: 'scale(1)' },
         }
+      },
+      fontFamily: {
+        army: ['"Special Elite"', 'monospace', 'sans-serif'],
       }
     },
   },

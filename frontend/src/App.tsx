@@ -18,35 +18,35 @@ function App() {
     <BrowserRouter>
       <div className="min-h-screen bg-gradient-to-r from-stacks-gradient1 to-stacks-gradient2 flex">
         {/* Sidebar navigation */}
-        <nav className="flex flex-col items-start gap-6 w-56 py-8 pr-8 border-r border-stacks-dark h-screen pl-6 bg-stacks-dark">
+        <nav className="flex flex-col items-start gap-6 w-56 py-8 pr-8 border-r border-stacks-dark h-screen pl-6 bg-stacks-dark font-army">
           <Link to="/game" className="flex items-center gap-2 hover:text-stacks-purple transition text-white">
             <Bomb size={20} />
-            <span>Play</span>
+            <span className="font-army">Play</span>
           </Link>
           <Link to="/gm" className="flex items-center gap-2 hover:text-stacks-purple transition text-white">
             <Calendar size={20} />
-            <span>Gm</span>
+            <span className="font-army">Gm</span>
           </Link>
           <Link to="/leaderboard" className="flex items-center gap-2 hover:text-stacks-purple transition text-white">
             <Trophy size={20} />
-            <span>Leaderboard</span>
+            <span className="font-army">Leaderboard</span>
           </Link>
           <Link to="/tournaments" className="flex items-center gap-2 hover:text-stacks-purple transition text-white">
             <Sword size={20} />
-            <span>Tournaments</span>
+            <span className="font-army">Tournaments</span>
           </Link>
           <Link to="/daily" className="flex items-center gap-2 hover:text-stacks-purple transition text-white">
             <Calendar size={20} />
-            <span>Daily</span>
+            <span className="font-army">Daily</span>
           </Link>
           <Link to="/achievements" className="flex items-center gap-2 hover:text-stacks-purple transition text-white">
             <Award size={20} />
-            <span>Achievements</span>
+            <span className="font-army">Achievements</span>
           </Link>
           {isAuthenticated() && (
             <Link to="/profile" className="flex items-center gap-2 hover:text-stacks-purple transition text-white">
               <User size={20} />
-              <span>Profile</span>
+              <span className="font-army">Profile</span>
             </Link>
           )}
         </nav>
