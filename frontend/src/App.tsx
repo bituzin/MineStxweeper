@@ -24,7 +24,7 @@ function App() {
             <span>Play</span>
           </Link>
           <Link to="/gm" className="flex items-center gap-2 hover:text-stacks-purple transition text-white">
-            <Sword size={20} />
+            <Calendar size={20} />
             <span>Gm</span>
           </Link>
           <Link to="/leaderboard" className="flex items-center gap-2 hover:text-stacks-purple transition text-white">
