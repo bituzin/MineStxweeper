@@ -39,7 +39,7 @@ export function DailyChallenge() {
                   <div className="text-2xl font-bold">{challenge.fastestTime}s</div>
                 </div>
               </div>
-              <Button size="lg" className="bg-white text-gray-900 hover:bg-gray-100">
+              <Button size="lg" className="bg-primary-400 text-white hover:bg-primary-500">
                 Play Today's Challenge
               </Button>
             </div>
