@@ -23,6 +23,14 @@ export default {
           red: '#ef4444',
           orange: '#f97316',
           yellow: '#eab308',
+        },
+        stacks: {
+          purple: '#5546FF', // Stacks purple
+          black: '#12151A',  // Stacks black
+          white: '#FFFFFF',  // Stacks white
+          gradient1: '#5546FF',
+          gradient2: '#7B6FFF',
+          gradient3: '#B7B0FF',
         }
       },
       animation: {
