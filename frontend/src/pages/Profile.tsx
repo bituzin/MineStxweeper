@@ -1,4 +1,5 @@
 import React from 'react';
+import { claimRewards } from '@/lib/stacks';
 import { User, Trophy, Flame, Award, Star } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 
@@ -32,7 +33,7 @@ export function Profile() {
               <div className="text-center">
                 <div className="text-3xl font-bold text-yellow-400">{stats.totalTokens}</div>
                 <div className="text-gray-400">Tokens</div>
-                <Button size="sm" className="mt-2">Claim Rewards</Button>
+                <Button size="sm" className="mt-2" onClick={async () => { try { await claimRewards(); } catch (e) { alert('Failed to claim rewards'); } }}>Claim Rewards</Button>
               </div>
             </div>
           </div>
