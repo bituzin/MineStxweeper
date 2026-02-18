@@ -11,6 +11,7 @@ import { Tournaments } from './pages/Tournaments';
 import { Profile } from './pages/Profile';
 import { Achievements } from './pages/Achievements';
 import { DailyChallenge } from './pages/DailyChallenge';
+import { Gm } from './pages/Gm';
 
 function App() {
   return (
@@ -21,6 +22,10 @@ function App() {
           <Link to="/game" className="flex items-center gap-2 hover:text-stacks-purple transition text-white">
             <Bomb size={20} />
             <span>Play</span>
+          </Link>
+          <Link to="/gm" className="flex items-center gap-2 hover:text-stacks-purple transition text-white">
+            <Sword size={20} />
+            <span>Gm</span>
           </Link>
           <Link to="/leaderboard" className="flex items-center gap-2 hover:text-stacks-purple transition text-white">
             <Trophy size={20} />
@@ -73,6 +78,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/game" element={<Game />} />
+              <Route path="/gm" element={<Gm />} />
               <Route path="/leaderboard" element={<Leaderboard />} />
               <Route path="/tournaments" element={<Tournaments />} />
               <Route path="/profile" element={<Profile />} />
