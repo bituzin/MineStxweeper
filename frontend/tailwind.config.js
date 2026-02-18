@@ -26,11 +26,11 @@ export default {
         },
         stacks: {
           purple: '#5546FF', // Stacks purple
-          black: '#12151A',  // Stacks black
+          dark: '#1A1A2E',   // Stacks dark gray
+          light: '#F5F6FA',  // Stacks light gray
           white: '#FFFFFF',  // Stacks white
           gradient1: '#5546FF',
           gradient2: '#7B6FFF',
-          gradient3: '#B7B0FF',
         }
       },
       animation: {
