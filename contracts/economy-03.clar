@@ -85,7 +85,7 @@
       (win-bonus (if won u50 u0))
       
       ;; Difficulty multiplier
-      (diff-mult (if (is-eq difficulty u1) u1 (if (is-eq difficulty u2) u2 u4)))
+      (diff-mult (if (is-eq difficulty u1) u2 (if (is-eq difficulty u2) u2 u4)))
      
       ;; Speed bonus (max 100 tokens)
       (speed-bonus (if (< time u100) (- u100 time) u0))
