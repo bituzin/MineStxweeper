@@ -1,11 +1,27 @@
-import React, { useState } from 'react';
-import { claimRewards } from '@/lib/stacks';
+import React, { useState, useEffect } from 'react';
+import { claimRewards, getPendingRewards, getUserAddress } from '@/lib/stacks';
 import { User, Trophy, Flame, Award, Star } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
 
 export function Profile() {
   const [modal, setModal] = useState<{ open: boolean; message: string }>({ open: false, message: '' });
+  const [pending, setPending] = useState<{ tokens: number; stx: number } | null>(null);
+
+  useEffect(() => {
+    async function fetchPending() {
+      const address = getUserAddress();
+      if (!address) return;
+      const result = await getPendingRewards(address);
+      if (result && result.platform_tokens !== undefined) {
+        setPending({ tokens: Number(result.platform_tokens), stx: Number(result.stx_amount) });
+      } else {
+        setPending({ tokens: 0, stx: 0 });
+      }
+    }
+    fetchPending();
+  }, []);
+
   // Mock player data
   const stats = {
     totalGames: 156,
@@ -33,8 +49,10 @@ export function Profile() {
                 <p className="text-gray-400 font-mono">ST1PQHQKV0...TPGZGM</p>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-yellow-400">{stats.totalTokens}</div>
-                <div className="text-gray-400">Tokens</div>
+                <div className="text-3xl font-bold text-yellow-400">{pending ? pending.tokens : '...'}</div>
+                <div className="text-gray-400">Pending Tokens</div>
+                <div className="text-3xl font-bold text-blue-400">{pending ? pending.stx : '...'}</div>
+                <div className="text-gray-400">Pending STX</div>
                 <Button size="sm" className="mt-2" onClick={async () => {
                   try {
                     await claimRewards();
