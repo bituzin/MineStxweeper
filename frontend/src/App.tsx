@@ -11,7 +11,7 @@ import { Tournaments } from './pages/Tournaments';
 import { Profile } from './pages/Profile';
 import { Achievements } from './pages/Achievements';
 import { DailyChallenge } from './pages/DailyChallenge';
-import { Gm } from './pages/Gm';
+import Gm from './pages/Gm';
 
 function App() {
   return (
