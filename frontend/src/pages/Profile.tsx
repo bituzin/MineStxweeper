@@ -33,7 +33,17 @@ export function Profile() {
               <div className="text-center">
                 <div className="text-3xl font-bold text-yellow-400">{stats.totalTokens}</div>
                 <div className="text-gray-400">Tokens</div>
-                <Button size="sm" className="mt-2" onClick={async () => { try { await claimRewards(); } catch (e) { alert('Failed to claim rewards'); } }}>Claim Rewards</Button>
+                <Button size="sm" className="mt-2" onClick={async () => {
+                  try {
+                    await claimRewards();
+                  } catch (e: any) {
+                    if (typeof e?.message === 'string' && e.message.includes('u701')) {
+                      alert('Nie masz żadnych nagród do odebrania.');
+                    } else {
+                      alert('Failed to claim rewards');
+                    }
+                  }
+                }}>Claim Rewards</Button>
               </div>
             </div>
           </div>
