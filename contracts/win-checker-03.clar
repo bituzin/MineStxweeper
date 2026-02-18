@@ -41,7 +41,7 @@
         ;; Submit score to leaderboard
         (try! (contract-call? .leaderboard-02 submit-score game-id (get player game) (get difficulty game) final-score))
         ;; Calculate and award rewards
-        (try! (contract-call? .economy-02 calculate-rewards game-id))
+        (try! (contract-call? .economy-03 calculate-rewards game-id))
         
         (print {event: "check-win-condition", game-id: game-id, won: true, final-score: final-score})
         (ok true)

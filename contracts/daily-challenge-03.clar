@@ -269,7 +269,7 @@
       )
       
       ;; Add rewards via economy contract
-      (unwrap-panic (contract-call? .economy-02 add-rewards tx-sender total-reward u0))
+      (unwrap-panic (contract-call? .economy-03 add-rewards tx-sender total-reward u0))
       
       (print {event: "claim-daily-reward", challenge-id: challenge-id, player: tx-sender, reward: total-reward})
       (ok total-reward)

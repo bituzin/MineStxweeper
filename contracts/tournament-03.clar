@@ -113,7 +113,7 @@
     (asserts! (< (get current-players tournament) (get max-players tournament)) ERR_TOURNAMENT_FULL)
     
     ;; Lock entry fee in economy contract
-    (unwrap! (contract-call? .economy-02 lock-funds tournament-id entry-fee) ERR_INSUFFICIENT_FUNDS)
+    (unwrap! (contract-call? .economy-03 lock-funds tournament-id entry-fee) ERR_INSUFFICIENT_FUNDS)
     
     ;; Add participant
     (map-set tournament-participants
