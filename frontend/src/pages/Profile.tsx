@@ -51,8 +51,6 @@ export function Profile() {
               <div className="text-center">
                 <div className="text-3xl font-bold text-yellow-400">{pending ? pending.tokens : '...'}</div>
                 <div className="text-gray-400">Pending Tokens</div>
-                <div className="text-3xl font-bold text-blue-400">{pending ? pending.stx : '...'}</div>
-                <div className="text-gray-400">Pending STX</div>
                 <Button size="sm" className="mt-2" onClick={async () => {
                   try {
                     await claimRewards();
