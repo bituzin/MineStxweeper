@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { claimRewards } from '@/lib/stacks';
 import { User, Trophy, Flame, Award, Star } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
+import { Modal } from '@/components/ui/Modal';
 
 export function Profile() {
+  const [modal, setModal] = useState<{ open: boolean; message: string }>({ open: false, message: '' });
   // Mock player data
   const stats = {
     totalGames: 156,
@@ -36,14 +38,16 @@ export function Profile() {
                 <Button size="sm" className="mt-2" onClick={async () => {
                   try {
                     await claimRewards();
+                    setModal({ open: true, message: 'Nagrody zostały odebrane!' });
                   } catch (e: any) {
                     if (typeof e?.message === 'string' && e.message.includes('u701')) {
-                      alert('Nie masz żadnych nagród do odebrania.');
+                      setModal({ open: true, message: 'Nie masz żadnych nagród do odebrania.' });
                     } else {
-                      alert('Failed to claim rewards');
+                      setModal({ open: true, message: 'Failed to claim rewards' });
                     }
                   }
                 }}>Claim Rewards</Button>
+                <Modal open={modal.open} message={modal.message} onClose={() => setModal({ open: false, message: '' })} />
               </div>
             </div>
           </div>
