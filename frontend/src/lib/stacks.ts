@@ -21,15 +21,16 @@ export const NETWORK = new StacksMainnet(); // Changed to StacksMainnet for prod
 
 export const CONTRACT_ADDRESS = 'SP2Z3M34KEKC79TMRMZB24YG30FE25JPN83TPZSZ2'; // Updated to deployed game-core-05 address
 export const CONTRACT_NAME_GAME_CORE = 'game-core-05';
-export const CONTRACT_NAME_BOARD_GEN = 'board-generator-03';
+export const CONTRACT_NAME_BOARD_GEN = 'board-generator-05';
 export const CONTRACT_NAME_WIN_CHECKER = 'win-checker-05';
-export const CONTRACT_NAME_LEADERBOARD = 'leaderboard-03';
-export const CONTRACT_NAME_PLAYER_PROFILE = 'player-profile-03';
-export const CONTRACT_NAME_ACHIEVEMENT = 'achievement-nft-03';
-export const CONTRACT_NAME_TOURNAMENT = 'tournament-03';
-export const CONTRACT_NAME_WAGER = 'wager-03';
-export const CONTRACT_NAME_DAILY = 'daily-challenge-03';
+export const CONTRACT_NAME_LEADERBOARD = 'leaderboard-05';
+export const CONTRACT_NAME_PLAYER_PROFILE = 'player-profile-05';
+export const CONTRACT_NAME_ACHIEVEMENT = 'achievement-nft-05';
+export const CONTRACT_NAME_TOURNAMENT = 'tournament-05';
+export const CONTRACT_NAME_WAGER = 'wager-05';
+export const CONTRACT_NAME_DAILY = 'daily-challenge-05';
 export const CONTRACT_NAME_ECONOMY = 'economy-05';
+export const CONTRACT_NAME_GM = 'gm-05';
 
 // ============================================================================
 // AUTHENTICATION
@@ -419,6 +420,36 @@ export async function claimRewards() {
       onCancel: () => {
         console.log('Claim canceled');
         reject('Claim canceled');
+      },
+    });
+  });
+}
+
+// ============================================================================
+// GM CONTRACT
+// ============================================================================
+
+export async function sendGm() {
+  if (!userSession.isUserSignedIn()) throw new Error('Not authenticated');
+
+  return new Promise((resolve, reject) => {
+    openContractCall({
+      contractAddress: CONTRACT_ADDRESS,
+      contractName: CONTRACT_NAME_GM,
+      functionName: 'gm-save',
+      functionArgs: [],
+      network: NETWORK,
+      appDetails: {
+        name: 'Minesweeper on Stacks',
+        icon: window.location.origin + '/logo.png',
+      },
+      onFinish: (data: any) => {
+        console.log('GM sent:', data);
+        resolve(data.txId);
+      },
+      onCancel: () => {
+        console.log('GM canceled');
+        reject('GM canceled');
       },
     });
   });

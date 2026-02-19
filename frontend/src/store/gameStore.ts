@@ -62,7 +62,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       const txid = await createGame(difficulty);
       // Ustaw gameId na txid (placeholder, docelowo pobierz z blockchaina)
       set({ gameId: txid, status: GameStatus.IN_PROGRESS, startedAt: Date.now() });
-      // Wywołanie generowania planszy przez kontrakt board-generator-03
+      // Wywołanie generowania planszy przez kontrakt board-generator-05
       await generateBoard(txid, config.width, config.height);
       // Pobierz planszę z blockchaina (placeholder)
       // const boardOnChain = await fetchBoard(txid);
