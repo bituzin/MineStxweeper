@@ -7,7 +7,7 @@ import { GameOwnerChecker } from '@/components/debug/GameOwnerChecker';
 
 export function Profile() {
   const [modal, setModal] = useState<{ open: boolean; message: string }>({ open: false, message: '' });
-  const [pending, setPending] = useState<{ tokens: number; stx: number }>({ tokens: 0, stx: 0 });
+  const [pending, setPending] = useState<{ mines: number; stx: number }>({ mines: 0, stx: 0 });
   const [loadingRewards, setLoadingRewards] = useState(false);
 
   useEffect(() => {
@@ -17,7 +17,7 @@ export function Profile() {
       try {
         const result = await getPendingRewards(address);
         if (result) {
-          setPending({ tokens: Number(result.platform_tokens || 0), stx: Number(result.stx_amount || 0) });
+          setPending({ mines: Number(result.platform_tokens || 0), stx: Number(result.stx_amount || 0) });
         }
       } catch (error) {
         console.error('Error fetching pending rewards:', error);
@@ -37,7 +37,7 @@ export function Profile() {
         if (address) {
           const result = await getPendingRewards(address);
           if (result) {
-            setPending({ tokens: Number(result.platform_tokens || 0), stx: Number(result.stx_amount || 0) });
+            setPending({ mines: Number(result.platform_tokens || 0), stx: Number(result.stx_amount || 0) });
           }
         }
       }, 2000);
@@ -55,7 +55,7 @@ export function Profile() {
     }
   };
 
-  const hasRewards = pending.tokens > 0 || pending.stx > 0;
+  const hasRewards = pending.mines > 0 || pending.stx > 0;
 
   // Mock player data
   const stats = {
@@ -86,7 +86,7 @@ export function Profile() {
               <div className="text-center">
                 <div className="mb-3">
                   <p className="text-sm text-gray-400">Pending Rewards</p>
-                  <p className="text-lg font-bold text-primary-400">{pending.tokens} tokens</p>
+                  <p className="text-lg font-bold text-primary-400">{pending.mines} mines</p>
                   {pending.stx > 0 && <p className="text-sm text-gray-300">{pending.stx} STX</p>}
                 </div>
                 <Button 
