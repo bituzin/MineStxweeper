@@ -18,6 +18,7 @@ async function fetchUserGames(address: string) {
     }
   );
   const data = await response.json();
+  console.log('API get-player-active-games response:', data);
   // Oczekiwany format: { result: { games: [...] } }
   if (data.result && data.result.games) {
     // Zamień listę uint na obiekty gry (można rozbudować o status, datę itd.)
