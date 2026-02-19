@@ -1,3 +1,5 @@
+;; Map: player -> list of gameIds
+(define-map player-games { player: principal } { games: (list 100 uint) })
 ;; GAME CORE CONTRACT - Game Factory + State + Move Validator (merged for gas optimization)
 ;; Handles game creation, state management, and move validation
 
@@ -173,6 +175,12 @@
         final-time: none,
         final-score: none
       }
+    )
+    ;; Add gameId to player's history
+    (let ((current (default-to {games: (list)} (map-get? player-games {player: tx-sender}))))
+      (match (as-max-len? (append (get games current) game-id) u100)
+        new-list (map-set player-games {player: tx-sender} {games: new-list})
+        false)
     )
     
     ;; Initialize stats
@@ -404,9 +412,7 @@
 
 ;; Get player's active games
 (define-read-only (get-player-active-games (player principal))
-  ;; In production, maintain a separate map for this
-  ;; For now, return placeholder
-  (ok (list))
+  (ok (get games (default-to {games: (list)} (map-get? player-games {player: player}))))
 )
 
 ;; ============================================================================

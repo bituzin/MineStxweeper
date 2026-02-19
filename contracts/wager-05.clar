@@ -61,7 +61,7 @@
       (wager-id (+ (var-get wager-id-nonce) u1))
     )
     ;; Lock challenger stake in economy
-    (unwrap! (contract-call? .economy-03 lock-funds wager-id stake) ERR_NOT_AUTHORIZED)
+    (unwrap! (contract-call? .economy-05 lock-funds wager-id stake) ERR_NOT_AUTHORIZED)
     
     ;; Create wager
     (map-set wagers
@@ -108,7 +108,7 @@
     (asserts! (< stacks-block-height (get expires-at wager)) ERR_WAGER_EXPIRED)
     
     ;; Lock opponent stake in economy
-    (unwrap! (contract-call? .economy-03 lock-funds wager-id stake) ERR_NOT_AUTHORIZED)
+    (unwrap! (contract-call? .economy-05 lock-funds wager-id stake) ERR_NOT_AUTHORIZED)
     
     ;; Generate shared board seed
     (let
@@ -141,7 +141,7 @@
     (
       (wager (unwrap! (map-get? wagers {wager-id: wager-id}) ERR_NOT_FOUND))
       ;; Get game information
-      (game (unwrap! (contract-call? .game-core-02 get-game-info game-id) ERR_NOT_FOUND))
+      (game (unwrap! (contract-call? .game-core-05 get-game-info game-id) ERR_NOT_FOUND))
       (is-challenger (is-eq tx-sender (get challenger wager)))
       (is-opponent (is-eq tx-sender (get opponent wager)))
     )
@@ -217,11 +217,11 @@
     )
     
     ;; Distribute prize to winner via economy
-    (unwrap! (contract-call? .economy-03 release-funds wager-id winner total-pot) ERR_NOT_AUTHORIZED)
+    (unwrap! (contract-call? .economy-05 release-funds wager-id winner total-pot) ERR_NOT_AUTHORIZED)
     
     ;; Award achievement for high stakes
     (and (> (get stake wager) u100)
-         (is-ok (contract-call? .achievement-nft-02 award-achievement winner u14)))
+         (is-ok (contract-call? .achievement-nft-05 award-achievement winner u14)))
     
     (ok winner)
   )
@@ -241,7 +241,7 @@
     (asserts! (is-eq (get status wager) "pending") ERR_NOT_AUTHORIZED)
     
     ;; Refund stake via economy
-    (unwrap! (contract-call? .economy-03 refund-funds wager-id) ERR_NOT_AUTHORIZED)
+    (unwrap! (contract-call? .economy-05 refund-funds wager-id) ERR_NOT_AUTHORIZED)
     
     ;; Update status
     (map-set wagers

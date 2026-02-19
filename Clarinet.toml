@@ -6,35 +6,38 @@ telemetry = false
 cache_dir = ".cache"
 requirements = []
 
-[contracts.game-core]
-path = "contracts/game-core.clar"
+[contracts.game-core-05]
+path = "contracts/game-core-05.clar"
 
-[contracts.board-generator]
-path = "contracts/board-generator.clar"
+[contracts.board-generator-05]
+path = "contracts/board-generator-05.clar"
 
-[contracts.win-checker]
-path = "contracts/win-checker.clar"
+[contracts.win-checker-05]
+path = "contracts/win-checker-05.clar"
 
-[contracts.leaderboard]
-path = "contracts/leaderboard.clar"
+[contracts.leaderboard-05]
+path = "contracts/leaderboard-05.clar"
 
-[contracts.achievement-nft]
-path = "contracts/achievement-nft.clar"
+[contracts.achievement-nft-05]
+path = "contracts/achievement-nft-05.clar"
 
-[contracts.player-profile]
-path = "contracts/player-profile.clar"
+[contracts.player-profile-05]
+path = "contracts/player-profile-05.clar"
 
-[contracts.tournament]
-path = "contracts/tournament.clar"
+[contracts.tournament-05]
+path = "contracts/tournament-05.clar"
 
-[contracts.wager]
-path = "contracts/wager.clar"
+[contracts.wager-05]
+path = "contracts/wager-05.clar"
 
-[contracts.daily-challenge]
-path = "contracts/daily-challenge.clar"
+[contracts.daily-challenge-05]
+path = "contracts/daily-challenge-05.clar"
 
-[contracts.economy]
-path = "contracts/economy.clar"
+[contracts.economy-05]
+path = "contracts/economy-05.clar"
+
+[contracts.gm-05]
+path = "contracts/gm-05.clar"
 
 [repl]
 costs_version = 2

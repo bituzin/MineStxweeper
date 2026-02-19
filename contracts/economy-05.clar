@@ -71,7 +71,7 @@
   (let
     (
       ;; Get game information
-      (game (unwrap! (contract-call? .game-core-02 get-game-info game-id) ERR_NOT_AUTHORIZED))
+      (game (unwrap! (contract-call? .game-core-05 get-game-info game-id) ERR_NOT_AUTHORIZED))
       (player (get player game))
       (won (is-eq (get status game) "won"))
       (difficulty (get difficulty game))
@@ -91,7 +91,7 @@
       (speed-bonus (if (< time u100) (- u100 time) u0))
       
       ;; Get win streak multiplier from player profile
-      (streak-mult (contract-call? .player-profile-02 get-streak-multiplier player))
+      (streak-mult (contract-call? .player-profile-05 get-streak-multiplier player))
       
       ;; Calculate total
       (subtotal (+ (+ base win-bonus) speed-bonus))

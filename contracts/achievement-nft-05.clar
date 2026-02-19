@@ -133,7 +133,7 @@
     (var-set last-token-id new-token-id)
     
     ;; Award achievement bonus via economy contract
-    (unwrap! (contract-call? .economy-03 award-achievement-bonus player achievement-id) ERR_NOT_AUTHORIZED)
+    (unwrap! (contract-call? .economy-05 award-achievement-bonus player achievement-id) ERR_NOT_AUTHORIZED)
     
     (print {event: "award-achievement", player: player, achievement-id: achievement-id, token-id: new-token-id})
     (ok new-token-id)
@@ -145,11 +145,11 @@
   (let
     (
       ;; Get player statistics
-      (stats (unwrap! (contract-call? .player-profile-02 get-player-stats player) ERR_NOT_FOUND))
+      (stats (unwrap! (contract-call? .player-profile-05 get-player-stats player) ERR_NOT_FOUND))
       ;; Get player streaks information
-      (streaks (unwrap! (contract-call? .player-profile-02 get-player-streaks player) ERR_NOT_FOUND))
+      (streaks (unwrap! (contract-call? .player-profile-05 get-player-streaks player) ERR_NOT_FOUND))
       ;; Get game information
-      (game (unwrap! (contract-call? .game-core-02 get-game-info game-id) ERR_NOT_FOUND))
+      (game (unwrap! (contract-call? .game-core-05 get-game-info game-id) ERR_NOT_FOUND))
     )
     ;; Check First Blood
     (begin

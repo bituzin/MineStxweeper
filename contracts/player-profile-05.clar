@@ -81,9 +81,9 @@
   (let
     (
       ;; Get game info from game-core contract
-      (game (unwrap! (contract-call? .game-core-02 get-game-info game-id) ERR_NOT_FOUND))
+      (game (unwrap! (contract-call? .game-core-05 get-game-info game-id) ERR_NOT_FOUND))
       ;; Get game statistics
-      (stats (unwrap! (contract-call? .game-core-02 get-game-stats game-id) ERR_NOT_FOUND))
+      (stats (unwrap! (contract-call? .game-core-05 get-game-stats game-id) ERR_NOT_FOUND))
       (current-stats (default-to (get-default-stats player) (map-get? player-stats {player: player})))
       (time (default-to u0 (get final-time game)))
       (won (is-eq (get status game) "won"))

@@ -113,7 +113,7 @@
     (asserts! (< (get current-players tournament) (get max-players tournament)) ERR_TOURNAMENT_FULL)
     
     ;; Lock entry fee in economy contract
-    (unwrap! (contract-call? .economy-03 lock-funds tournament-id entry-fee) ERR_INSUFFICIENT_FUNDS)
+    (unwrap! (contract-call? .economy-05 lock-funds tournament-id entry-fee) ERR_INSUFFICIENT_FUNDS)
     
     ;; Add participant
     (map-set tournament-participants
@@ -195,7 +195,7 @@
     (
       (tournament (unwrap! (map-get? tournaments {tournament-id: tournament-id}) ERR_NOT_FOUND))
       ;; Get game info from game-core
-      (game (unwrap! (contract-call? .game-core-02 get-game-info game-id) ERR_NOT_FOUND))
+      (game (unwrap! (contract-call? .game-core-05 get-game-info game-id) ERR_NOT_FOUND))
       (participant (unwrap! (map-get? tournament-participants {tournament-id: tournament-id, player: tx-sender}) ERR_NOT_AUTHORIZED))
     )
     ;; Validate

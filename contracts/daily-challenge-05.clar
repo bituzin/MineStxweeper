@@ -121,7 +121,7 @@
     (
       (challenge (unwrap! (map-get? daily-challenges {challenge-id: challenge-id}) ERR_NOT_FOUND))
       ;; Get game information
-      (game (unwrap! (contract-call? .game-core-02 get-game-info game-id) ERR_NOT_FOUND))
+      (game (unwrap! (contract-call? .game-core-05 get-game-info game-id) ERR_NOT_FOUND))
       (player (get player game))
       (time (default-to u0 (get final-time game)))
       (score (default-to u0 (get final-score game)))
@@ -210,7 +210,7 @@
         ;; Award achievement for 30-day streak
         (begin
           (and (is-eq new-streak u30)
-               (is-ok (contract-call? .achievement-nft-02 award-achievement player u15)))
+               (is-ok (contract-call? .achievement-nft-05 award-achievement player u15)))
           (ok true)
         )
       )
@@ -269,7 +269,7 @@
       )
       
       ;; Add rewards via economy contract
-      (unwrap-panic (contract-call? .economy-03 add-rewards tx-sender total-reward u0))
+      (unwrap-panic (contract-call? .economy-05 add-rewards tx-sender total-reward u0))
       
       (print {event: "claim-daily-reward", challenge-id: challenge-id, player: tx-sender, reward: total-reward})
       (ok total-reward)
