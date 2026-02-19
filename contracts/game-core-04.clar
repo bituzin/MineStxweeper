@@ -178,7 +178,9 @@
     )
     ;; Add gameId to player's history
     (let ((current (default-to {games: (list)} (map-get? player-games {player: tx-sender}))))
-      (map-set player-games {player: tx-sender} {games: (default-to (get games current) (as-max-len? (append (get games current) game-id) u100))})
+      (match (as-max-len? (append (get games current) game-id) u100)
+        new-list (map-set player-games {player: tx-sender} {games: new-list})
+        false)
     )
     
     ;; Initialize stats
