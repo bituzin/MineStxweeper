@@ -244,6 +244,8 @@ export async function getPendingRewards(playerAddress: string) {
     );
     const data = await response.json();
     
+    console.log('getPendingRewards API response:', data);
+    
     if (!data.okay || !data.result) {
       // No pending rewards
       return { platform_tokens: 0, stx_amount: 0 };
@@ -253,11 +255,25 @@ export async function getPendingRewards(playerAddress: string) {
     const clarityValue = deserializeCV(data.result);
     const value = cvToValue(clarityValue);
     
+    console.log('getPendingRewards decoded value:', value);
+    
+    // Response is (ok (some {...})) or (ok none)
+    // cvToValue might return null for none, or the tuple for some
+    if (!value) {
+      return { platform_tokens: 0, stx_amount: 0 };
+    }
+    
+    // Handle response wrapper
+    let actualValue = value;
+    if (typeof value === 'object' && 'value' in value) {
+      actualValue = value.value;
+    }
+    
     // value should be a tuple with platform-tokens and stx-amount
-    if (value && typeof value === 'object') {
+    if (actualValue && typeof actualValue === 'object') {
       return {
-        platform_tokens: value['platform-tokens'] || 0,
-        stx_amount: value['stx-amount'] || 0
+        platform_tokens: actualValue['platform-tokens'] || 0,
+        stx_amount: actualValue['stx-amount'] || 0
       };
     }
     
@@ -285,7 +301,10 @@ export async function getPlayerGames(playerAddress: string): Promise<number[]> {
     );
     const data = await response.json();
     
+    console.log('getPlayerGames API response:', data);
+    
     if (!data.okay || !data.result) {
+      console.log('getPlayerGames: API returned not okay or no result');
       return [];
     }
     
@@ -293,15 +312,71 @@ export async function getPlayerGames(playerAddress: string): Promise<number[]> {
     const clarityValue = deserializeCV(data.result);
     const value = cvToValue(clarityValue);
     
-    // value should be a list of uints
+    console.log('getPlayerGames decoded value:', value);
+    
+    // Response is (ok list), so value is wrapped in ok response
+    // cvToValue should handle this, but let's check the structure
+    if (value && typeof value === 'object' && 'value' in value) {
+      // It's a response type (ok/err), get the inner value
+      const innerValue = value.value;
+      if (Array.isArray(innerValue)) {
+        return innerValue.map((v: any) => Number(v));
+      }
+    }
+    
+    // Direct array (if cvToValue already unwrapped the ok)
     if (Array.isArray(value)) {
       return value.map((v: any) => Number(v));
     }
     
+    console.log('getPlayerGames: unexpected value format', value);
     return [];
   } catch (error) {
     console.error('Error fetching player games:', error);
     return [];
+  }
+}
+
+export async function getLastGmGreeter(): Promise<string | null> {
+  try {
+    const response = await fetch(
+      `https://stacks-node-api.mainnet.stacks.co/v2/contracts/call-read/${CONTRACT_ADDRESS}/gm-05/get-last-greeter`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sender: CONTRACT_ADDRESS,
+          arguments: []
+        })
+      }
+    );
+    const data = await response.json();
+    
+    console.log('getLastGmGreeter API response:', data);
+    
+    if (!data.okay || !data.result) {
+      return null;
+    }
+    
+    // Decode Clarity value
+    const clarityValue = deserializeCV(data.result);
+    const value = cvToValue(clarityValue);
+    
+    console.log('getLastGmGreeter decoded value:', value);
+    
+    // Response is (ok principal), unwrap if needed
+    if (value && typeof value === 'object' && 'value' in value) {
+      return value.value as string;
+    }
+    
+    if (typeof value === 'string') {
+      return value;
+    }
+    
+    return null;
+  } catch (error) {
+    console.error('Error fetching last GM greeter:', error);
+    return null;
   }
 }
 
