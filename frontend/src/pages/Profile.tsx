@@ -7,20 +7,55 @@ import { GameOwnerChecker } from '@/components/debug/GameOwnerChecker';
 
 export function Profile() {
   const [modal, setModal] = useState<{ open: boolean; message: string }>({ open: false, message: '' });
+  const [pending, setPending] = useState<{ tokens: number; stx: number }>({ tokens: 0, stx: 0 });
+  const [loadingRewards, setLoadingRewards] = useState(false);
 
   useEffect(() => {
     async function fetchPending() {
       const address = getUserAddress();
       if (!address) return;
-      const result = await getPendingRewards(address);
-      if (result && result.platform_tokens !== undefined) {
-        setPending({ tokens: Number(result.platform_tokens), stx: Number(result.stx_amount) });
-      } else {
-        setPending({ tokens: 0, stx: 0 });
+      try {
+        const result = await getPendingRewards(address);
+        if (result) {
+          setPending({ tokens: Number(result.platform_tokens || 0), stx: Number(result.stx_amount || 0) });
+        }
+      } catch (error) {
+        console.error('Error fetching pending rewards:', error);
       }
     }
     fetchPending();
   }, []);
+
+  const handleClaimRewards = async () => {
+    setLoadingRewards(true);
+    try {
+      await claimRewards();
+      setModal({ open: true, message: 'Nagrody zostały odebrane! Transakcja wysłana.' });
+      // Refresh pending rewards after claim
+      setTimeout(async () => {
+        const address = getUserAddress();
+        if (address) {
+          const result = await getPendingRewards(address);
+          if (result) {
+            setPending({ tokens: Number(result.platform_tokens || 0), stx: Number(result.stx_amount || 0) });
+          }
+        }
+      }, 2000);
+    } catch (e: unknown) {
+      const error = e as { message?: string };
+      if (typeof error?.message === 'string' && error.message.includes('u701')) {
+        setModal({ open: true, message: 'Nie masz żadnych nagród do odebrania.' });
+      } else if (error?.message === 'Claim canceled') {
+        setModal({ open: true, message: 'Anulowano odbieranie nagród.' });
+      } else {
+        setModal({ open: true, message: 'Błąd podczas odbierania nagród. Spróbuj ponownie.' });
+      }
+    } finally {
+      setLoadingRewards(false);
+    }
+  };
+
+  const hasRewards = pending.tokens > 0 || pending.stx > 0;
 
   // Mock player data
   const stats = {
@@ -49,18 +84,19 @@ export function Profile() {
                 <p className="text-gray-400 font-mono">ST1PQHQKV0...TPGZGM</p>
               </div>
               <div className="text-center">
-                <Button size="sm" className="mt-2" onClick={async () => {
-                  try {
-                    await claimRewards();
-                    setModal({ open: true, message: 'Nagrody zostały odebrane!' });
-                  } catch (e: any) {
-                    if (typeof e?.message === 'string' && e.message.includes('u701')) {
-                      setModal({ open: true, message: 'Nie masz żadnych nagród do odebrania.' });
-                    } else {
-                      setModal({ open: true, message: 'Failed to claim rewards' });
-                    }
-                  }
-                }}>Claim Rewards</Button>
+                <div className="mb-3">
+                  <p className="text-sm text-gray-400">Pending Rewards</p>
+                  <p className="text-lg font-bold text-primary-400">{pending.tokens} tokens</p>
+                  {pending.stx > 0 && <p className="text-sm text-gray-300">{pending.stx} STX</p>}
+                </div>
+                <Button 
+                  size="sm" 
+                  className="mt-2" 
+                  onClick={handleClaimRewards}
+                  disabled={!hasRewards || loadingRewards}
+                >
+                  {loadingRewards ? 'Claiming...' : 'Claim Rewards'}
+                </Button>
                 <Modal open={modal.open} message={modal.message} onClose={() => setModal({ open: false, message: '' })} />
               </div>
             </div>
