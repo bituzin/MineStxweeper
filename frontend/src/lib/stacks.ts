@@ -19,8 +19,8 @@ export const userSession = new UserSession({ appConfig });
 
 export const NETWORK = new StacksMainnet(); // Changed to StacksMainnet for production
 
-export const CONTRACT_ADDRESS = 'SP2Z3M34KEKC79TMRMZB24YG30FE25JPN83TPZSZ2'; // Updated to deployed game-core-03 address
-export const CONTRACT_NAME_GAME_CORE = 'game-core-03';
+export const CONTRACT_ADDRESS = 'SP2Z3M34KEKC79TMRMZB24YG30FE25JPN83TPZSZ2'; // Updated to deployed game-core-04 address
+export const CONTRACT_NAME_GAME_CORE = 'game-core-04';
 export const CONTRACT_NAME_BOARD_GEN = 'board-generator-03';
 export const CONTRACT_NAME_WIN_CHECKER = 'win-checker-03';
 export const CONTRACT_NAME_LEADERBOARD = 'leaderboard-03';
@@ -245,9 +245,9 @@ export async function getPendingRewards(playerAddress: string) {
 }
 
 export async function getGamePlayer(gameId: number) {
-  // Read-only call to game-core-03.get-game-info
+  // Read-only call to game-core-04.get-game-info
   return fetch(
-    `https://stacks-node-api.mainnet.stacks.co/v2/contracts/call-read/${CONTRACT_ADDRESS}/game-core-03/get-game-info`,
+    `https://stacks-node-api.mainnet.stacks.co/v2/contracts/call-read/${CONTRACT_ADDRESS}/game-core-04/get-game-info`,
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
