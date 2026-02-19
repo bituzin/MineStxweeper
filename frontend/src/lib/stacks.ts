@@ -8,6 +8,9 @@ import {
   uintCV,
   principalCV,
   bufferCV,
+  deserializeCV,
+  cvToValue,
+  ClarityValue,
 } from '@stacks/transactions';
 
 // ============================================================================
@@ -225,24 +228,81 @@ export async function getLeaderboard(difficulty: number, limit: number) {
 }
 
 export async function getPendingRewards(playerAddress: string) {
-  // Read-only call to economy-05.get-pending-rewards
-  // You need to use Stacks.js or fetch from API
-  // Example placeholder:
-  return fetch(
-    `https://stacks-node-api.mainnet.stacks.co/v2/contracts/call-read/${CONTRACT_ADDRESS}/economy-05/get-pending-rewards`,
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        sender: playerAddress,
-        arguments: [
-          { type: 'principal', value: playerAddress }
-        ]
-      })
+  try {
+    const response = await fetch(
+      `https://stacks-node-api.mainnet.stacks.co/v2/contracts/call-read/${CONTRACT_ADDRESS}/economy-05/get-pending-rewards`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sender: playerAddress,
+          arguments: [
+            { type: 'principal', value: playerAddress }
+          ]
+        })
+      }
+    );
+    const data = await response.json();
+    
+    if (!data.okay || !data.result) {
+      // No pending rewards
+      return { platform_tokens: 0, stx_amount: 0 };
     }
-  )
-    .then(res => res.json())
-    .then(data => data.result);
+    
+    // Decode Clarity value
+    const clarityValue = deserializeCV(data.result);
+    const value = cvToValue(clarityValue);
+    
+    // value should be a tuple with platform-tokens and stx-amount
+    if (value && typeof value === 'object') {
+      return {
+        platform_tokens: value['platform-tokens'] || 0,
+        stx_amount: value['stx-amount'] || 0
+      };
+    }
+    
+    return { platform_tokens: 0, stx_amount: 0 };
+  } catch (error) {
+    console.error('Error fetching pending rewards:', error);
+    return { platform_tokens: 0, stx_amount: 0 };
+  }
+}
+
+export async function getPlayerGames(playerAddress: string): Promise<number[]> {
+  try {
+    const response = await fetch(
+      `https://stacks-node-api.mainnet.stacks.co/v2/contracts/call-read/${CONTRACT_ADDRESS}/game-core-05/get-player-active-games`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sender: playerAddress,
+          arguments: [
+            { type: 'principal', value: playerAddress }
+          ]
+        })
+      }
+    );
+    const data = await response.json();
+    
+    if (!data.okay || !data.result) {
+      return [];
+    }
+    
+    // Decode Clarity value
+    const clarityValue = deserializeCV(data.result);
+    const value = cvToValue(clarityValue);
+    
+    // value should be a list of uints
+    if (Array.isArray(value)) {
+      return value.map((v: any) => Number(v));
+    }
+    
+    return [];
+  } catch (error) {
+    console.error('Error fetching player games:', error);
+    return [];
+  }
 }
 
 export async function getGamePlayer(gameId: number) {
