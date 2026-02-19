@@ -22,14 +22,14 @@ export const NETWORK = new StacksMainnet(); // Changed to StacksMainnet for prod
 export const CONTRACT_ADDRESS = 'SP2Z3M34KEKC79TMRMZB24YG30FE25JPN83TPZSZ2'; // Updated to deployed game-core-04 address
 export const CONTRACT_NAME_GAME_CORE = 'game-core-04';
 export const CONTRACT_NAME_BOARD_GEN = 'board-generator-03';
-export const CONTRACT_NAME_WIN_CHECKER = 'win-checker-03';
+export const CONTRACT_NAME_WIN_CHECKER = 'win-checker-04';
 export const CONTRACT_NAME_LEADERBOARD = 'leaderboard-03';
 export const CONTRACT_NAME_PLAYER_PROFILE = 'player-profile-03';
 export const CONTRACT_NAME_ACHIEVEMENT = 'achievement-nft-03';
 export const CONTRACT_NAME_TOURNAMENT = 'tournament-03';
 export const CONTRACT_NAME_WAGER = 'wager-03';
 export const CONTRACT_NAME_DAILY = 'daily-challenge-03';
-export const CONTRACT_NAME_ECONOMY = 'economy-03';
+export const CONTRACT_NAME_ECONOMY = 'economy-04';
 
 // ============================================================================
 // AUTHENTICATION
@@ -224,11 +224,11 @@ export async function getLeaderboard(difficulty: number, limit: number) {
 }
 
 export async function getPendingRewards(playerAddress: string) {
-  // Read-only call to economy-03.get-pending-rewards
+  // Read-only call to economy-04.get-pending-rewards
   // You need to use Stacks.js or fetch from API
   // Example placeholder:
   return fetch(
-    `https://stacks-node-api.mainnet.stacks.co/v2/contracts/call-read/${CONTRACT_ADDRESS}/economy-03/get-pending-rewards`,
+    `https://stacks-node-api.mainnet.stacks.co/v2/contracts/call-read/${CONTRACT_ADDRESS}/economy-04/get-pending-rewards`,
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -372,21 +372,54 @@ export async function completeDailyChallenge(
 // ECONOMY
 // ============================================================================
 
+export async function checkWinCondition(gameId: number) {
+  if (!userSession.isUserSignedIn()) throw new Error('Not authenticated');
+
+  return new Promise((resolve, reject) => {
+    openContractCall({
+      contractAddress: CONTRACT_ADDRESS,
+      contractName: CONTRACT_NAME_WIN_CHECKER,
+      functionName: 'check-win-condition',
+      functionArgs: [uintCV(gameId)],
+      network: NETWORK,
+      appDetails: {
+        name: 'Minesweeper on Stacks',
+        icon: window.location.origin + '/logo.png',
+      },
+      onFinish: (data: any) => {
+        console.log('Win condition checked:', data);
+        resolve(data.txId);
+      },
+      onCancel: () => {
+        console.log('Win check canceled');
+        reject('Win check canceled');
+      },
+    });
+  });
+}
+
 export async function claimRewards() {
-  const address = getUserAddress();
-  if (!address) throw new Error('Not authenticated');
+  if (!userSession.isUserSignedIn()) throw new Error('Not authenticated');
 
-  const txOptions = {
-    network: NETWORK,
-    anchorMode: AnchorMode.Any,
-    contractAddress: CONTRACT_ADDRESS,
-    contractName: CONTRACT_NAME_ECONOMY,
-    functionName: 'claim-rewards',
-    functionArgs: [],
-    senderKey: userSession.loadUserData().appPrivateKey,
-    postConditionMode: PostConditionMode.Allow,
-  };
-
-  const transaction = await makeContractCall(txOptions);
-  return await broadcastTransaction(transaction, NETWORK);
+  return new Promise((resolve, reject) => {
+    openContractCall({
+      contractAddress: CONTRACT_ADDRESS,
+      contractName: CONTRACT_NAME_ECONOMY,
+      functionName: 'claim-rewards',
+      functionArgs: [],
+      network: NETWORK,
+      appDetails: {
+        name: 'Minesweeper on Stacks',
+        icon: window.location.origin + '/logo.png',
+      },
+      onFinish: (data: any) => {
+        console.log('Rewards claimed:', data);
+        resolve(data.txId);
+      },
+      onCancel: () => {
+        console.log('Claim canceled');
+        reject('Claim canceled');
+      },
+    });
+  });
 }

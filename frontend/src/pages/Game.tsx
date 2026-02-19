@@ -5,10 +5,13 @@ import { Board } from '@/components/game/Board';
 import { GameInfo } from '@/components/game/GameInfo';
 import { Button } from '@/components/ui/Button';
 import { RefreshCw, Trophy, Skull } from 'lucide-react';
+import { checkWinCondition } from '@/lib/stacks';
 
 export function Game() {
   const { startNewGame, resetGame, status, difficulty } = useGameStore();
   const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty>(Difficulty.BEGINNER);
+  const [winGameId, setWinGameId] = useState('');
+  const [submittingWin, setSubmittingWin] = useState(false);
 
   const [loading, setLoading] = useState(false);
   const handleStartGame = async () => {
@@ -19,6 +22,23 @@ export function Game() {
 
   const handleReset = () => {
     resetGame();
+  };
+
+  const handleSubmitWin = async () => {
+    if (!winGameId) {
+      alert('Podaj Game ID!');
+      return;
+    }
+    setSubmittingWin(true);
+    try {
+      await checkWinCondition(Number(winGameId));
+      alert('Wygrana zarejestrowana na blockchainie! Możesz teraz sklaimować nagrody w profilu.');
+    } catch (error) {
+      console.error('Error submitting win:', error);
+      alert('Błąd podczas rejestrowania wygranej: ' + error);
+    } finally {
+      setSubmittingWin(false);
+    }
   };
 
   return (
@@ -84,12 +104,32 @@ export function Game() {
 
             {/* Game Over Messages */}
             {status === GameStatus.WON && (
-              <div className="bg-green-600 text-white p-6 rounded-xl shadow-2xl animate-pulse">
-                <div className="flex items-center gap-3 text-2xl font-bold">
+              <div className="bg-green-600 text-white p-6 rounded-xl shadow-2xl">
+                <div className="flex items-center gap-3 text-2xl font-bold mb-2">
                   <Trophy size={32} />
                   <span>You Won! 🎉</span>
                 </div>
-                <p className="mt-2">Congratulations on clearing the board!</p>
+                <p className="mb-4">Congratulations on clearing the board!</p>
+                <div className="bg-green-700 p-4 rounded-lg">
+                  <p className="text-sm mb-2">Aby zarejestrować wygraną i otrzymać nagrody:</p>
+                  <div className="flex gap-2">
+                    <input
+                      type="number"
+                      placeholder="Podaj Game ID z blockchaina"
+                      value={winGameId}
+                      onChange={(e) => setWinGameId(e.target.value)}
+                      className="flex-1 px-3 py-2 rounded bg-white text-gray-900"
+                    />
+                    <Button 
+                      onClick={handleSubmitWin} 
+                      disabled={submittingWin}
+                      variant="secondary"
+                    >
+                      {submittingWin ? 'Submitting...' : 'Submit Win'}
+                    </Button>
+                  </div>
+                  <p className="text-xs mt-2 opacity-80">Game ID znajdziesz w sekcji History lub w transakcji create-game</p>
+                </div>
               </div>
             )}
 
