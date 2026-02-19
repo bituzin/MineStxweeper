@@ -3,13 +3,27 @@ import { getUserAddress } from '@/lib/stacks';
 
 // Placeholder for fetching games - in real app, replace with API or contract call
 async function fetchUserGames(address: string) {
-  // TODO: Replace with real contract call (get-player-active-games)
-  // For now, return mock data
-  return [
-    { gameId: 101, status: 'won', createdAt: '2026-02-18' },
-    { gameId: 102, status: 'in-progress', createdAt: '2026-02-19' },
-    { gameId: 103, status: 'lost', createdAt: '2026-02-17' },
-  ];
+  // Wywołanie read-only do kontraktu game-core-04
+  const response = await fetch(
+    `https://stacks-node-api.mainnet.stacks.co/v2/contracts/call-read/SP2Z3M34KEKC79TMRMZB24YG30FE25JPN83TPZSZ2/game-core-04/get-player-active-games`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        sender: address,
+        arguments: [
+          { type: 'principal', value: address }
+        ]
+      })
+    }
+  );
+  const data = await response.json();
+  // Oczekiwany format: { result: { games: [...] } }
+  if (data.result && data.result.games) {
+    // Zamień listę uint na obiekty gry (można rozbudować o status, datę itd.)
+    return data.result.games.map((gameId: number) => ({ gameId, status: 'nieznany', createdAt: '-' }));
+  }
+  return [];
 }
 
 export default function History() {
