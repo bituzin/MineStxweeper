@@ -37,9 +37,9 @@
         (try! (contract-call? .game-core-05 mark-game-won game-id final-score))
         
         ;; Update player statistics
-        (try! (contract-call? .player-profile-02 update-win-stats (get player game) game-id (get difficulty game)))
+        (try! (contract-call? .player-profile-05 update-win-stats (get player game) game-id (get difficulty game)))
         ;; Submit score to leaderboard
-        (try! (contract-call? .leaderboard-02 submit-score game-id (get player game) (get difficulty game) final-score))
+        (try! (contract-call? .leaderboard-05 submit-score game-id (get player game) (get difficulty game) final-score))
         ;; Calculate and award rewards
         (try! (contract-call? .economy-05 calculate-rewards game-id))
         
