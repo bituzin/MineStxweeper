@@ -3,9 +3,9 @@ import { getUserAddress } from '@/lib/stacks';
 
 // Placeholder for fetching games - in real app, replace with API or contract call
 async function fetchUserGames(address: string) {
-  // Wywołanie read-only do kontraktu game-core-04
+  // Wywołanie read-only do kontraktu game-core-05
   const response = await fetch(
-    `https://stacks-node-api.mainnet.stacks.co/v2/contracts/call-read/SP2Z3M34KEKC79TMRMZB24YG30FE25JPN83TPZSZ2/game-core-04/get-player-active-games`,
+    `https://stacks-node-api.mainnet.stacks.co/v2/contracts/call-read/SP2Z3M34KEKC79TMRMZB24YG30FE25JPN83TPZSZ2/game-core-05/get-player-active-games`,
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

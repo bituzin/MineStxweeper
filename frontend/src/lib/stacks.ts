@@ -19,17 +19,17 @@ export const userSession = new UserSession({ appConfig });
 
 export const NETWORK = new StacksMainnet(); // Changed to StacksMainnet for production
 
-export const CONTRACT_ADDRESS = 'SP2Z3M34KEKC79TMRMZB24YG30FE25JPN83TPZSZ2'; // Updated to deployed game-core-04 address
-export const CONTRACT_NAME_GAME_CORE = 'game-core-04';
+export const CONTRACT_ADDRESS = 'SP2Z3M34KEKC79TMRMZB24YG30FE25JPN83TPZSZ2'; // Updated to deployed game-core-05 address
+export const CONTRACT_NAME_GAME_CORE = 'game-core-05';
 export const CONTRACT_NAME_BOARD_GEN = 'board-generator-03';
-export const CONTRACT_NAME_WIN_CHECKER = 'win-checker-04';
+export const CONTRACT_NAME_WIN_CHECKER = 'win-checker-05';
 export const CONTRACT_NAME_LEADERBOARD = 'leaderboard-03';
 export const CONTRACT_NAME_PLAYER_PROFILE = 'player-profile-03';
 export const CONTRACT_NAME_ACHIEVEMENT = 'achievement-nft-03';
 export const CONTRACT_NAME_TOURNAMENT = 'tournament-03';
 export const CONTRACT_NAME_WAGER = 'wager-03';
 export const CONTRACT_NAME_DAILY = 'daily-challenge-03';
-export const CONTRACT_NAME_ECONOMY = 'economy-04';
+export const CONTRACT_NAME_ECONOMY = 'economy-05';
 
 // ============================================================================
 // AUTHENTICATION
@@ -224,11 +224,11 @@ export async function getLeaderboard(difficulty: number, limit: number) {
 }
 
 export async function getPendingRewards(playerAddress: string) {
-  // Read-only call to economy-04.get-pending-rewards
+  // Read-only call to economy-05.get-pending-rewards
   // You need to use Stacks.js or fetch from API
   // Example placeholder:
   return fetch(
-    `https://stacks-node-api.mainnet.stacks.co/v2/contracts/call-read/${CONTRACT_ADDRESS}/economy-04/get-pending-rewards`,
+    `https://stacks-node-api.mainnet.stacks.co/v2/contracts/call-read/${CONTRACT_ADDRESS}/economy-05/get-pending-rewards`,
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -245,9 +245,9 @@ export async function getPendingRewards(playerAddress: string) {
 }
 
 export async function getGamePlayer(gameId: number) {
-  // Read-only call to game-core-04.get-game-info
+  // Read-only call to game-core-05.get-game-info
   return fetch(
-    `https://stacks-node-api.mainnet.stacks.co/v2/contracts/call-read/${CONTRACT_ADDRESS}/game-core-04/get-game-info`,
+    `https://stacks-node-api.mainnet.stacks.co/v2/contracts/call-read/${CONTRACT_ADDRESS}/game-core-05/get-game-info`,
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
