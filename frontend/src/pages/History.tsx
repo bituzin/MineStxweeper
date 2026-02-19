@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { getUserAddress, getPlayerGames } from '@/lib/stacks';
+import { getUserAddress, getPlayerGames, getLastGmGreeter } from '@/lib/stacks';
 
 export default function History() {
   const [games, setGames] = useState<{ gameId: number; status: string; createdAt: string }[]>([]);
   const [address, setAddress] = useState('');
   const [loading, setLoading] = useState(true);
+  const [lastGmGreeter, setLastGmGreeter] = useState<string | null>(null);
 
   useEffect(() => {
     async function loadGames() {
@@ -20,6 +21,11 @@ export default function History() {
           createdAt: new Date().toLocaleDateString() // Placeholder
         }));
         setGames(gameObjects);
+        
+        // Fetch last GM greeter
+        const gmGreeter = await getLastGmGreeter();
+        setLastGmGreeter(gmGreeter);
+        
         setLoading(false);
       } else {
         setLoading(false);
@@ -31,8 +37,26 @@ export default function History() {
   return (
     <div className="min-h-screen bg-gray-900 pt-8">
       <div className="container mx-auto px-4">
-        <h1 className="text-3xl font-bold text-white mb-6">Twoja historia gier</h1>
+        <h1 className="text-3xl font-bold text-white mb-6">Twoja historia</h1>
+        
+        {/* GM Section */}
+        <div className="bg-gray-800 rounded-xl p-6 mb-6">
+          <h2 className="text-xl font-bold text-primary-400 mb-4">📣 Community GM</h2>
+          {loading ? (
+            <div className="text-gray-400">Ładowanie...</div>
+          ) : lastGmGreeter ? (
+            <div className="text-gray-300">
+              <p className="mb-2">OstatniGreMLer:</p>
+              <p className="font-mono text-yellow-300 break-all">{lastGmGreeter}</p>
+            </div>
+          ) : (
+            <div className="text-gray-400">Brak historii GM</div>
+          )}
+        </div>
+        
+        {/* Games Section */}
         <div className="bg-gray-800 rounded-xl p-6">
+          <h2 className="text-xl font-bold text-primary-400 mb-4">🎮 Twoje gry</h2>
           <div className="mb-4 text-gray-400">Twój adres: <span className="font-mono text-white">{address || 'Niezalogowany'}</span></div>
           {loading ? (
             <div className="text-gray-400">Ładowanie...</div>
