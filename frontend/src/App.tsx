@@ -12,6 +12,7 @@ import { Profile } from './pages/Profile';
 import { Achievements } from './pages/Achievements';
 import { DailyChallenge } from './pages/DailyChallenge';
 import Gm from './pages/Gm';
+import History from './pages/History';
 
 function App() {
   return (
@@ -42,6 +43,10 @@ function App() {
           <Link to="/achievements" className="flex items-center gap-2 hover:text-stacks-purple transition text-white">
             <Award size={20} />
             <span className="font-army">Achievements</span>
+          </Link>
+          <Link to="/history" className="flex items-center gap-2 hover:text-stacks-purple transition text-white">
+            <Trophy size={20} />
+            <span className="font-army">History</span>
           </Link>
           {isAuthenticated() && (
             <Link to="/profile" className="flex items-center gap-2 hover:text-stacks-purple transition text-white">
@@ -84,6 +89,7 @@ function App() {
               <Route path="/profile" element={<Profile />} />
               <Route path="/achievements" element={<Achievements />} />
               <Route path="/daily" element={<DailyChallenge />} />
+              <Route path="/history" element={<History />} />
             </Routes>
           </div>
         </div>
