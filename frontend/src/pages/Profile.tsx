@@ -3,6 +3,7 @@ import { claimRewards, getPendingRewards, getUserAddress } from '@/lib/stacks';
 import { User, Trophy, Flame, Award, Star } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
+import { GameOwnerChecker } from '@/components/debug/GameOwnerChecker';
 
 export function Profile() {
   const [modal, setModal] = useState<{ open: boolean; message: string }>({ open: false, message: '' });
@@ -102,6 +103,9 @@ export function Profile() {
                 </div>
               </div>
             </div>
+          </div>
+          <div className="mt-6">
+            <GameOwnerChecker />
           </div>
         </div>
       </div>
