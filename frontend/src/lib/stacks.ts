@@ -244,6 +244,25 @@ export async function getPendingRewards(playerAddress: string) {
     .then(data => data.result);
 }
 
+export async function getGamePlayer(gameId: number) {
+  // Read-only call to game-core-03.get-game-info
+  return fetch(
+    `https://stacks-node-api.mainnet.stacks.co/v2/contracts/call-read/${CONTRACT_ADDRESS}/game-core-03/get-game-info`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        sender: CONTRACT_ADDRESS,
+        arguments: [
+          { type: 'uint', value: gameId }
+        ]
+      })
+    }
+  )
+    .then(res => res.json())
+    .then(data => data.result ? data.result.player : null);
+}
+
 // ============================================================================
 // TOURNAMENT CONTRACT CALLS
 // ============================================================================
