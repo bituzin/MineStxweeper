@@ -19,7 +19,7 @@ function App() {
     <BrowserRouter>
       <div className="min-h-screen bg-gradient-to-r from-stacks-gradient1 to-stacks-gradient2 flex">
         {/* Sidebar navigation */}
-        <nav className="flex flex-col items-start gap-6 w-56 py-8 pr-8 border-r border-stacks-dark h-screen pl-6 bg-stacks-dark font-army">
+        <nav className="flex flex-col items-start gap-6 w-56 py-8 pr-8 border-r border-stacks-dark min-h-screen h-full pl-6 bg-stacks-dark font-army">
           <Link to="/game" className="flex items-center gap-2 hover:text-stacks-purple transition text-white">
             <Bomb size={20} />
             <span className="font-army">Play</span>
