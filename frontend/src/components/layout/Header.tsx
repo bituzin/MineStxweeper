@@ -49,7 +49,7 @@ export function Header() {
           {/* Main content and top bar */}
           <div className="flex-1 flex flex-col">
             <div className="flex items-center justify-between px-8 py-4 border-b border-gray-800">
-              <Link to="/" className="flex items-center gap-2 text-2xl font-bold">
+              <Link to="/" className="flex items-center gap-2 text-2xl font-extrabold font-army">
                 <Bomb size={32} className="text-primary-500" />
                 <span>Minesweeper</span>
               </Link>
