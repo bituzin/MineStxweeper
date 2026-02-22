@@ -44,14 +44,14 @@ export function Game() {
   return (
     <div className="min-h-screen bg-gray-900 pt-8">
       <div className="container mx-auto px-4">
-        <h1 className="text-4xl font-bold text-white text-center mb-8">
+        <h1 className="text-4xl font-bold text-white text-center mb-8 font-army">
           Play Minesweeper
         </h1>
 
         {/* Difficulty Selection */}
         {status === GameStatus.NOT_STARTED && (
           <div className="max-w-2xl mx-auto mb-8 bg-gray-800 p-8 rounded-xl">
-            <h2 className="text-2xl font-bold text-white mb-4">Select Difficulty</h2>
+            <h2 className="text-2xl font-bold text-white mb-4 font-army">Select Difficulty</h2>
             
             <div className="grid grid-cols-3 gap-4 mb-6">
               <DifficultyButton
@@ -89,7 +89,7 @@ export function Game() {
         {status !== GameStatus.NOT_STARTED && (
           <div className="flex flex-col items-center gap-6">
             {/* Game Controls */}
-            <div className="bg-gray-800 p-6 rounded-xl w-full max-w-4xl">
+            <div className="bg-gray-800 p-6 rounded-xl w-full max-w-4xl font-army">
               <div className="flex justify-between items-center">
                 <GameInfo />
                 
@@ -105,7 +105,7 @@ export function Game() {
             {/* Game Over Messages */}
             {status === GameStatus.WON && (
               <div className="bg-green-600 text-white p-6 rounded-xl shadow-2xl">
-                <div className="flex items-center gap-3 text-2xl font-bold mb-2">
+                <div className="flex items-center gap-3 text-2xl font-bold mb-2 font-army">
                   <Trophy size={32} />
                   <span>You Won! 🎉</span>
                 </div>
@@ -135,7 +135,7 @@ export function Game() {
 
             {status === GameStatus.LOST && (
               <div className="bg-red-600 text-white p-6 rounded-xl shadow-2xl">
-                <div className="flex items-center gap-3 text-2xl font-bold">
+                <div className="flex items-center gap-3 text-2xl font-bold font-army">
                   <Skull size={32} />
                   <span>Game Over!</span>
                 </div>
@@ -149,7 +149,7 @@ export function Game() {
             </div>
 
             {/* Instructions */}
-            <div className="bg-gray-800 p-6 rounded-xl max-w-2xl text-gray-300">
+            <div className="bg-gray-800 p-6 rounded-xl max-w-2xl text-gray-300 font-army">
               <h3 className="text-lg font-bold text-white mb-3">How to Play</h3>
               <ul className="space-y-2 text-sm">
                 <li>• <strong>Left Click:</strong> Reveal a cell</li>
