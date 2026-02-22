@@ -56,7 +56,7 @@ export function Header() {
               <div>
                 {authenticated ? (
                   <div className="flex items-center gap-3">
-                    <span className="text-sm text-gray-400">
+                    <span className="text-sm text-gray-400 font-army">
                       {address?.slice(0, 6)}...{address?.slice(-4)}
                     </span>
                     <Button variant="secondary" size="sm" onClick={disconnectWallet}>
