@@ -49,14 +49,14 @@ export function Header() {
           {/* Main content and top bar */}
           <div className="flex-1 flex flex-col">
             <div className="flex items-center justify-between px-8 py-4 border-b border-gray-800">
-              <Link to="/" className="flex items-center gap-2 text-2xl font-extrabold army">
+              <Link to="/" className="flex items-center gap-2 text-2xl font-extrabold font-army">
                 <Bomb size={32} className="text-primary-500" />
                 <span>Minesweeper</span>
               </Link>
               <div>
                 {authenticated ? (
                   <div className="flex items-center gap-3">
-                    <span className="text-sm text-gray-400 army">
+                    <span className="text-sm text-gray-400 font-army">
                       {address?.slice(0, 6)}...{address?.slice(-4)}
                     </span>
                     <Button variant="secondary" size="sm" onClick={disconnectWallet}>
