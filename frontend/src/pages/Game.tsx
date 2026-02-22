@@ -79,8 +79,8 @@ export function Game() {
               />
             </div>
 
-            <Button onClick={handleStartGame} className="w-full" size="lg" disabled={loading}>
-              {loading ? 'Starting...' : 'Start Game'}
+            <Button onClick={handleStartGame} className="w-full font-army" size="lg" disabled={loading}>
+              <span className="font-army">{loading ? 'Starting...' : 'Start Game'}</span>
             </Button>
           </div>
         )}
