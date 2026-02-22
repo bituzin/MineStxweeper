@@ -5,107 +5,39 @@ import { Bomb, Trophy, Zap, Users, Gift } from 'lucide-react';
 
 export function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900">
+    <div className="min-h-screen h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900">
       {/* Hero Section */}
-      <div className="container mx-auto px-4 pt-8">
+      <div className="container mx-auto px-4">
         <div className="text-center text-white">
           <div className="flex justify-center mb-6">
             <Bomb size={80} className="text-primary-400" />
           </div>
-          
-          <h1 className="text-6xl font-bold mb-4">
+          <h1 className="text-6xl font-extrabold mb-4 font-army">
             Minesweeper on <span className="text-primary-400">Stacks</span>
           </h1>
-          
-          <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-            Decentralized Minesweeper with tournaments, NFT achievements, 
+          <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto font-army">
+            Decentralized Minesweeper with tournaments, NFT achievements,
             competitive rankings, and play-to-earn mechanics
           </p>
-
           <div className="flex gap-4 justify-center">
             <Link to="/game">
-              <Button size="lg" className="text-lg px-8">
-                Play Now
+              <Button size="lg" className="text-lg px-8 font-army">
+                <span className="font-army">Play Now</span>
               </Button>
             </Link>
-            
             <Link to="/leaderboard">
-              <Button size="lg" variant="secondary" className="text-lg px-8">
-                View Leaderboard
+              <Button size="lg" variant="secondary" className="text-lg px-8 font-army">
+                <span className="font-army">View Leaderboard</span>
               </Button>
             </Link>
           </div>
         </div>
       </div>
 
-      {/* Features */}
-      <div className="container mx-auto px-4 py-20">
-        <h2 className="text-4xl font-bold text-white text-center mb-12">
-          Features
-        </h2>
+      
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          <FeatureCard
-            icon={<Bomb size={40} />}
-            title="Classic Gameplay"
-            description="Three difficulty levels with provably fair random board generation"
-          />
-          
-          <FeatureCard
-            icon={<Trophy size={40} />}
-            title="Tournaments"
-            description="Compete in bracket-style tournaments with prize pools"
-          />
-          
-          <FeatureCard
-            icon={<Zap size={40} />}
-            title="Play-to-Earn"
-            description="Earn platform tokens for wins and achievements"
-          />
-          
-          <FeatureCard
-            icon={<Users size={40} />}
-            title="1v1 Wagers"
-            description="Challenge friends, winner takes all"
-          />
-          
-          <FeatureCard
-            icon={<Gift size={40} />}
-            title="NFT Achievements"
-            description="15+ unique unlockable badges (SIP-009)"
-          />
-          
-          <FeatureCard
-            icon={<Trophy size={40} />}
-            title="Global Leaderboards"
-            description="Compete for world records and top rankings"
-          />
-          
-          <FeatureCard
-            icon={<Zap size={40} />}
-            title="Daily Challenges"
-            description="Same board for everyone, daily rewards"
-          />
-          
-          <FeatureCard
-            icon={<Users size={40} />}
-            title="Streak Bonuses"
-            description="Multipliers for consecutive wins"
-          />
-        </div>
-      </div>
-
-      {/* Stats */}
-      <div className="container mx-auto px-4 py-20">
-        <div className="bg-gray-800 rounded-2xl p-12">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center text-white">
-            <StatCard number="1,234" label="Total Players" />
-            <StatCard number="45,678" label="Games Played" />
-            <StatCard number="12.5K" label="STX in Prizes" />
-            <StatCard number="89" label="Tournaments" />
-          </div>
-        </div>
-      </div>
+      
+        
     </div>
   );
 }
