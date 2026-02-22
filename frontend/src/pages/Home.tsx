@@ -40,17 +40,7 @@ export function Home() {
 
       // ...existing code...
 
-      {/* Stats */}
-      <div className="container mx-auto px-4 py-20">
-        <div className="bg-gray-800 rounded-2xl p-12">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center text-white">
-            <StatCard number="1,234" label="Total Players" />
-            <StatCard number="45,678" label="Games Played" />
-            <StatCard number="12.5K" label="STX in Prizes" />
-            <StatCard number="89" label="Tournaments" />
-          </div>
-        </div>
-      </div>
+      // ...existing code...
         // ...existing code...
     </div>
   );
