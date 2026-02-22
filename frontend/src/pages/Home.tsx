@@ -38,62 +38,7 @@ export function Home() {
         </div>
       </div>
 
-      {/* Features */}
-      <div className="container mx-auto px-4 py-20">
-        <h2 className="text-4xl font-bold text-white text-center mb-12">
-          Features
-        </h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          <FeatureCard
-            icon={<Bomb size={40} />}
-            title="Classic Gameplay"
-            description="Three difficulty levels with provably fair random board generation"
-          />
-          
-          <FeatureCard
-            icon={<Trophy size={40} />}
-            title="Tournaments"
-            description="Compete in bracket-style tournaments with prize pools"
-          />
-          
-          <FeatureCard
-            icon={<Zap size={40} />}
-            title="Play-to-Earn"
-            description="Earn platform tokens for wins and achievements"
-          />
-          
-          <FeatureCard
-            icon={<Users size={40} />}
-            title="1v1 Wagers"
-            description="Challenge friends, winner takes all"
-          />
-          
-          <FeatureCard
-            icon={<Gift size={40} />}
-            title="NFT Achievements"
-            description="15+ unique unlockable badges (SIP-009)"
-          />
-          
-          <FeatureCard
-            icon={<Trophy size={40} />}
-            title="Global Leaderboards"
-            description="Compete for world records and top rankings"
-          />
-          
-          <FeatureCard
-            icon={<Zap size={40} />}
-            title="Daily Challenges"
-            description="Same board for everyone, daily rewards"
-          />
-          
-          <FeatureCard
-            icon={<Users size={40} />}
-            title="Streak Bonuses"
-            description="Multipliers for consecutive wins"
-          />
-        </div>
-      </div>
+      // ...existing code...
 
       {/* Stats */}
       <div className="container mx-auto px-4 py-20">
@@ -106,6 +51,7 @@ export function Home() {
           </div>
         </div>
       </div>
+        // ...existing code...
     </div>
   );
 }
