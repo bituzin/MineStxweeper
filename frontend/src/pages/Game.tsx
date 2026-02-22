@@ -184,8 +184,8 @@ function DifficultyButton({ selected, onClick, label, details }: DifficultyButto
           : 'border-gray-600 bg-gray-700 text-gray-300 hover:border-gray-500'
       }`}
     >
-      <div className="font-bold text-lg">{label}</div>
-      <div className="text-sm mt-1">{details}</div>
+      <div className="font-bold text-lg font-army">{label}</div>
+      <div className="text-sm mt-1 font-army">{details}</div>
     </button>
   );
 }
