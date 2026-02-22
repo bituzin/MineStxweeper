@@ -13,7 +13,7 @@ export function Home() {
             <Bomb size={80} className="text-primary-400" />
           </div>
           
-          <h1 className="text-6xl font-bold mb-4">
+          <h1 className="text-6xl font-bold mb-4 font-army">
             Minesweeper on <span className="text-primary-400">Stacks</span>
           </h1>
           
