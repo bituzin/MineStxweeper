@@ -19,15 +19,15 @@ function App() {
     <BrowserRouter>
       <div className="min-h-screen bg-gradient-to-r from-stacks-gradient1 to-stacks-gradient2 flex flex-col">
         {/* Top bar */}
-        <div className="flex items-center justify-between px-8 py-4 border-b border-stacks-dark w-full" style={{minHeight: '64px', backgroundColor: '#b3541a'}}>
-          <Link to="/" className="flex items-center gap-2 text-2xl font-bold text-stacks-purple">
+        <div className="flex items-center justify-between px-8 py-4 border-b border-stacks-dark w-full font-army" style={{minHeight: '64px', backgroundColor: '#b3541a'}}>
+          <Link to="/" className="flex items-center gap-2 text-2xl font-bold text-stacks-purple font-army">
             <Bomb size={32} className="text-stacks-purple" />
             <span>MineStxweeper</span>
           </Link>
           <div>
             {isAuthenticated() ? (
               <div className="flex items-center gap-3">
-                <span className="text-sm text-gray-400">
+                <span className="text-sm text-gray-400 font-army">
                   {getUserAddress()?.slice(0, 6)}...{getUserAddress()?.slice(-4)}
                 </span>
                 <Button variant="secondary" size="sm" onClick={disconnectWallet}>
