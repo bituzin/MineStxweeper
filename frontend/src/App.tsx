@@ -19,7 +19,7 @@ function App() {
     <BrowserRouter>
       <div className="min-h-screen bg-gradient-to-r from-stacks-gradient1 to-stacks-gradient2 flex flex-col">
         {/* Top bar */}
-        <div className="flex items-center justify-between px-8 py-4 border-b border-stacks-dark bg-stacks-light w-full" style={{minHeight: '64px'}}>
+        <div className="flex items-center justify-between px-8 py-4 border-b border-stacks-dark bg-gradient-to-r from-stacks-gradient1 to-stacks-dark w-full" style={{minHeight: '64px'}}>
           <Link to="/" className="flex items-center gap-2 text-2xl font-bold text-stacks-purple">
             <Bomb size={32} className="text-stacks-purple" />
             <span>MineStxweeper</span>
