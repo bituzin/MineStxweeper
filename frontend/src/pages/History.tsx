@@ -37,7 +37,7 @@ export default function History() {
   return (
     <div className="min-h-screen bg-gray-900 pt-8">
       <div className="container mx-auto px-4">
-        <h1 className="text-3xl font-bold text-white mb-6">Twoja historia</h1>
+          <h1 className="text-3xl font-bold text-white mb-6 font-army">Twoja historia</h1>
         
         {/* GM Section */}
         <div className="bg-gray-800 rounded-xl p-6 mb-6">
