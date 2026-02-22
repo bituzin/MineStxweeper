@@ -24,14 +24,14 @@ export function Home() {
 
           <div className="flex gap-4 justify-center">
             <Link to="/game">
-              <Button size="lg" className="text-lg px-8">
-                Play Now
+              <Button size="lg" className="text-lg px-8 font-army">
+                <span className="font-army">Play Now</span>
               </Button>
             </Link>
             
             <Link to="/leaderboard">
-              <Button size="lg" variant="secondary" className="text-lg px-8">
-                View Leaderboard
+              <Button size="lg" variant="secondary" className="text-lg px-8 font-army">
+                <span className="font-army">View Leaderboard</span>
               </Button>
             </Link>
           </div>

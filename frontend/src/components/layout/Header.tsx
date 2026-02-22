@@ -55,11 +55,11 @@ export function Header() {
               </Link>
               <div>
                 {authenticated ? (
-                  <div className="flex items-center gap-3">
-                    <span className="text-sm text-gray-400 font-army">
+                  <div className="flex items-center gap-3 font-army">
+                    <span className="text-sm text-gray-400">
                       {address?.slice(0, 6)}...{address?.slice(-4)}
                     </span>
-                    <Button variant="secondary" size="sm" onClick={disconnectWallet}>
+                    <Button variant="secondary" size="sm" className="font-army" onClick={disconnectWallet}>
                       Disconnect
                     </Button>
                   </div>
