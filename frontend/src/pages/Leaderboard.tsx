@@ -16,8 +16,8 @@ export function Leaderboard() {
     <div className="min-h-screen bg-gray-900 pt-8">
       <div className="container mx-auto px-4">
         <h1 className="text-4xl font-bold text-white text-center mb-8 flex items-center justify-center gap-3">
-          <Trophy size={40} className="text-yellow-400" />
-          Global Leaderboard
+           <Trophy size={40} className="text-yellow-400" />
+           <span className="font-army">Global Leaderboard</span>
         </h1>
 
         {/* Difficulty Tabs */}
@@ -78,7 +78,7 @@ function DifficultyTab({ label, active, onClick }: { label: string; active: bool
   return (
     <button
       onClick={onClick}
-      className={`px-6 py-3 rounded-lg font-semibold transition ${
+      className={`px-6 py-3 rounded-lg font-semibold font-army transition ${
         active
           ? 'bg-primary-600 text-white'
           : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
