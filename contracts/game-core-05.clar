@@ -416,6 +416,32 @@
 )
 
 ;; ============================================================================
+;; NEW ENHANCEMENT: LEADERBOARD
+;; ============================================================================
+
+;; Returns top N finished games sorted by final-score descending
+(define-read-only (get-top-games (limit uint))
+  (let
+    (
+      ;; Convert all games map entries into a list
+      (all-games (map-values games))
+    )
+    ;; Filter only finished games with final-score
+    (let ((finished-games (filter (lambda (g)
+                                     (is-some (get final-score g)))
+                                   all-games)))
+      ;; Sort descending by final-score
+      (let ((sorted (sort finished-games (lambda (a b)
+                                           (> (unwrap! (get final-score a) u0)
+                                              (unwrap! (get final-score b) u0))))))
+        ;; Return top 'limit' games
+        (ok (slice sorted u0 limit))
+      )
+    )
+  )
+)
+
+;; ============================================================================
 ;; ADMIN FUNCTIONS
 ;; ============================================================================
 
