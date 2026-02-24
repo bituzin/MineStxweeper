@@ -53,7 +53,7 @@ export function Leaderboard() {
             <tbody>
               {leaderboard.map((entry) => (
                 <tr key={entry.rank} className="border-t border-gray-700 hover:bg-gray-750 transition">
-                  <td className="px-6 py-4 text-white font-bold">
+                  <td className="px-6 py-4 text-white font-bold font-army">
                     <div className="flex items-center gap-2">
                       {entry.rank === 1 && <Medal className="text-yellow-400" size={20} />}
                       {entry.rank === 2 && <Medal className="text-gray-400" size={20} />}
@@ -61,9 +61,9 @@ export function Leaderboard() {
                       #{entry.rank}
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-gray-300 font-mono">{entry.player}</td>
-                  <td className="px-6 py-4 text-right text-primary-400 font-bold">{entry.time}s</td>
-                  <td className="px-6 py-4 text-right text-green-400 font-bold">{entry.score}</td>
+                  <td className="px-6 py-4 text-gray-300 font-army">{entry.player}</td>
+                  <td className="px-6 py-4 text-right text-primary-400 font-bold font-army">{entry.time}s</td>
+                  <td className="px-6 py-4 text-right text-green-400 font-bold font-army">{entry.score}</td>
                 </tr>
               ))}
             </tbody>
