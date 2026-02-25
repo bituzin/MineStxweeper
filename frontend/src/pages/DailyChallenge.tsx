@@ -17,7 +17,7 @@ export function DailyChallenge() {
       <div className="container mx-auto px-4">
         <h1 className="text-4xl font-bold text-white text-center mb-8 flex items-center justify-center gap-3">
           <Calendar size={40} className="text-primary-400" />
-          Daily Challenge
+          <span className="font-army">Daily Challenge</span>
         </h1>
 
         <div className="max-w-3xl mx-auto">
