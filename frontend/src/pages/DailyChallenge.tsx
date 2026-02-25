@@ -24,7 +24,7 @@ export function DailyChallenge() {
           {/* Challenge Info */}
           <div className="bg-gradient-to-r from-primary-900 to-purple-900 rounded-xl p-8 mb-6">
             <div className="text-center text-white">
-              <h2 className="text-3xl font-bold mb-4">Today's Challenge</h2>
+              <h2 className="text-3xl font-bold font-army mb-4">Today's Challenge</h2>
               <div className="flex justify-center gap-8 mb-6">
                 <div>
                   <div className="text-sm text-gray-300">Difficulty</div>
