@@ -4,7 +4,7 @@ A fully decentralized Minesweeper implementation on Stacks blockchain with tourn
 
 ## 🌐 Live Demo
 
-**[https://mine-stxweeper.vercel.app/](https://mine-stxweeper.vercel.app/)**
+**[🎮 MineStxweeper - Live Demo](https://mine-stxweeper.vercel.app/)**
 
 ## 🎮 Features
 
@@ -134,7 +134,7 @@ MIT License - see [LICENSE](LICENSE) for details
 
 ## 🔗 Links
 
-- **Live Demo**: https://mine-stxweeper.vercel.app/
+- **Live Demo**: [MineStxweeper](https://mine-stxweeper.vercel.app/)
 - **Twitter**: @MinesweeperSTX
 - **Discord**: discord.gg/minesweeper-stx
 - **Docs**: https://docs.minesweeper-stacks.app
