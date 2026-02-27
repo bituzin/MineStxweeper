@@ -2,6 +2,10 @@
 
 A fully decentralized Minesweeper implementation on Stacks blockchain with tournaments, NFT achievements, competitive rankings, and play-to-earn mechanics.
 
+## 🌐 Live Demo
+
+**[https://mine-stxweeper.vercel.app/](https://mine-stxweeper.vercel.app/)**
+
 ## 🎮 Features
 
 ### Core Gameplay
@@ -51,91 +55,6 @@ A fully decentralized Minesweeper implementation on Stacks blockchain with tourn
 - **Stacks.js** for blockchain interaction
 - **React Router** for navigation
 - **Zustand** for state management
-
-## 📁 Project Structure
-
-```
-minesweeper-stacks/
-├── contracts/                 # Clarity smart contracts
-│   ├── game-core.clar
-│   ├── board-generator.clar
-│   ├── win-checker.clar
-│   ├── leaderboard.clar
-│   ├── achievement-nft.clar
-│   ├── player-profile.clar
-│   ├── tournament.clar
-│   ├── wager.clar
-│   ├── daily-challenge.clar
-│   └── economy.clar
-│
-├── frontend/                  # React frontend
-│   ├── src/
-│   │   ├── components/       # Reusable components
-│   │   │   ├── game/        # Game board, cells, timer
-│   │   │   ├── ui/          # Buttons, modals, cards
-│   │   │   └── layout/      # Header, footer, sidebar
-│   │   ├── pages/           # Page components
-│   │   │   ├── Home.tsx
-│   │   │   ├── Game.tsx
-│   │   │   ├── Leaderboard.tsx
-│   │   │   ├── Tournaments.tsx
-│   │   │   ├── Profile.tsx
-│   │   │   ├── DailyChallenge.tsx
-│   │   │   ├── Wager.tsx
-│   │   │   └── Achievements.tsx
-│   │   ├── lib/             # Utilities
-│   │   │   ├── stacks.ts    # Blockchain integration
-│   │   │   ├── game-logic.ts # Off-chain game logic
-│   │   │   └── flood-fill.ts # Cascade computation
-│   │   ├── store/           # Zustand stores
-│   │   ├── types/           # TypeScript types
-│   │   └── App.tsx
-│   ├── public/
-│   └── package.json
-│
-├── tests/                    # Contract tests
-├── deployments/             # Deployment scripts
-└── README.md
-```
-
-## 🚀 Getting Started
-
-### Prerequisites
-- Node.js 18+
-- Clarinet (for contract development)
-- Stacks wallet (Hiro, Xverse)
-
-### Installation
-
-```bash
-# Clone repository
-git clone <repo-url>
-cd minesweeper-stacks
-
-# Install frontend dependencies
-cd frontend
-npm install
-
-# Start development server
-npm run dev
-
-# In another terminal - test contracts
-cd ../
-clarinet test
-```
-
-### Deploy Contracts
-
-```bash
-# Configure deployment
-clarinet deployments generate --testnet
-
-# Deploy to testnet
-clarinet deployments apply -p deployments/testnet.yaml
-
-# Deploy to mainnet
-clarinet deployments apply -p deployments/mainnet.yaml
-```
 
 ## 🎯 Game Mechanics
 
@@ -205,45 +124,6 @@ Streak bonuses: 1.2x - 5x multipliers
 - ✅ Multi-sig treasury (>1000 STX)
 - ✅ Dispute resolution window (24h)
 
-## 📊 Gas Cost Estimates (Stacks Mainnet)
-
-```
-New game creation: ~0.02 STX
-Single cell reveal: ~0.01 STX
-Batch reveal (30 cells): ~0.15 STX
-Place flag: ~0.005 STX
-Complete game: ~0.5-1.5 STX total
-Tournament entry: ~0.02 STX
-Claim rewards: ~0.03 STX
-```
-
-## 🛣️ Roadmap
-
-### Phase 1 (Q1 2026) - MVP ✅
-- Core contracts deployment
-- Basic frontend
-- Testnet launch
-
-### Phase 2 (Q2 2026)
-- Tournament system
-- Achievement NFTs
-- Mainnet launch
-
-### Phase 3 (Q3 2026)
-- Daily challenges
-- Wager system
-- Mobile app
-
-### Phase 4 (Q4 2026)
-- Layer 2 integration (10x cheaper gas)
-- Cosmetic NFTs marketplace
-- Staking & governance
-
-### Phase 5 (2027+)
-- Multi-game platform (other puzzle games)
-- Cross-chain bridge
-- Esports tournaments
-
 ## 🤝 Contributing
 
 Contributions welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
@@ -254,7 +134,7 @@ MIT License - see [LICENSE](LICENSE) for details
 
 ## 🔗 Links
 
-- **Website**: https://minesweeper-stacks.app
+- **Live Demo**: https://mine-stxweeper.vercel.app/
 - **Twitter**: @MinesweeperSTX
 - **Discord**: discord.gg/minesweeper-stx
 - **Docs**: https://docs.minesweeper-stacks.app
