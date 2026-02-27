@@ -1,16 +1,15 @@
 import { AppConfig, UserSession, showConnect } from '@stacks/connect';
-import { StacksMainnet, StacksTestnet } from '@stacks/network';
+import { StacksMainnet } from '@stacks/network';
 import { openContractCall } from '@stacks/connect';
 import {
   broadcastTransaction,
+  makeContractCall,
   AnchorMode,
   PostConditionMode,
   uintCV,
   principalCV,
-  bufferCV,
   deserializeCV,
   cvToValue,
-  ClarityValue,
 } from '@stacks/transactions';
 
 // ============================================================================
@@ -103,10 +102,10 @@ export function isAuthenticated(): boolean {
 // GAME CORE CONTRACT CALLS
 // ============================================================================
 
-export async function createGame(difficulty: number) {
+export async function createGame(difficulty: number): Promise<string> {
   if (!userSession.isUserSignedIn()) throw new Error('Not authenticated');
 
-  return new Promise((resolve, reject) => {
+  return new Promise<string>((resolve, reject) => {
     openContractCall({
       contractAddress: CONTRACT_ADDRESS,
       contractName: CONTRACT_NAME_GAME_CORE,

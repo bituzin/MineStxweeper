@@ -61,9 +61,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
       // Wywołanie kontraktu na blockchainie
       const txid = await createGame(difficulty);
       // Ustaw gameId na txid (placeholder, docelowo pobierz z blockchaina)
-      set({ gameId: txid, status: GameStatus.IN_PROGRESS, startedAt: Date.now() });
+      set({ gameId: txid as unknown as number, status: GameStatus.IN_PROGRESS, startedAt: Date.now() });
       // Wywołanie generowania planszy przez kontrakt board-generator-05
-      await generateBoard(txid, config.width, config.height);
+      await generateBoard(txid as unknown as number, config.width, config.height);
       // Pobierz planszę z blockchaina (placeholder)
       // const boardOnChain = await fetchBoard(txid);
       // set({ board: boardOnChain });
@@ -90,7 +90,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
 
     let newBoard = [...state.board];
-    let newStatus = state.status;
+    let newStatus: GameStatus = state.status;
     let startedAt = state.startedAt;
 
     // First move - place mines if board doesn't have any yet
