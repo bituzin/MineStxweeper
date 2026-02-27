@@ -1,16 +1,17 @@
 import { AppConfig, UserSession, showConnect } from '@stacks/connect';
-import { StacksMainnet, StacksTestnet } from '@stacks/network';
+import { StacksMainnet } from '@stacks/network';
 import { openContractCall } from '@stacks/connect';
 import {
   broadcastTransaction,
+  makeContractCall,
   AnchorMode,
   PostConditionMode,
   uintCV,
   principalCV,
-  bufferCV,
+  listCV,
+  stringAsciiCV,
   deserializeCV,
   cvToValue,
-  ClarityValue,
 } from '@stacks/transactions';
 
 // ============================================================================
@@ -103,10 +104,10 @@ export function isAuthenticated(): boolean {
 // GAME CORE CONTRACT CALLS
 // ============================================================================
 
-export async function createGame(difficulty: number) {
+export async function createGame(difficulty: number): Promise<string> {
   if (!userSession.isUserSignedIn()) throw new Error('Not authenticated');
 
-  return new Promise((resolve, reject) => {
+  return new Promise<string>((resolve, reject) => {
     openContractCall({
       contractAddress: CONTRACT_ADDRESS,
       contractName: CONTRACT_NAME_GAME_CORE,
@@ -164,9 +165,8 @@ export async function revealCellsBatch(
     functionName: 'reveal-cells-batch',
     functionArgs: [
       uintCV(gameId),
-      // Convert to Clarity list
-      { type: 'list', value: cellIndices.map((i) => uintCV(i)) },
-      { type: 'list', value: adjacentMinesList.map((m) => uintCV(m)) },
+      listCV(cellIndices.map((i) => uintCV(i))),
+      listCV(adjacentMinesList.map((m) => uintCV(m))),
     ],
     senderKey: userSession.loadUserData().appPrivateKey,
     postConditionMode: PostConditionMode.Allow,
@@ -419,7 +419,7 @@ export async function createTournament(
     contractName: CONTRACT_NAME_TOURNAMENT,
     functionName: 'create-tournament',
     functionArgs: [
-      { type: 'string-ascii', data: name },
+      stringAsciiCV(name),
       uintCV(difficulty),
       uintCV(entryFee),
       uintCV(maxPlayers),
