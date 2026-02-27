@@ -8,6 +8,8 @@ import {
   PostConditionMode,
   uintCV,
   principalCV,
+  listCV,
+  stringAsciiCV,
   deserializeCV,
   cvToValue,
 } from '@stacks/transactions';
@@ -163,9 +165,8 @@ export async function revealCellsBatch(
     functionName: 'reveal-cells-batch',
     functionArgs: [
       uintCV(gameId),
-      // Convert to Clarity list
-      { type: 'list', value: cellIndices.map((i) => uintCV(i)) },
-      { type: 'list', value: adjacentMinesList.map((m) => uintCV(m)) },
+      listCV(cellIndices.map((i) => uintCV(i))),
+      listCV(adjacentMinesList.map((m) => uintCV(m))),
     ],
     senderKey: userSession.loadUserData().appPrivateKey,
     postConditionMode: PostConditionMode.Allow,
@@ -418,7 +419,7 @@ export async function createTournament(
     contractName: CONTRACT_NAME_TOURNAMENT,
     functionName: 'create-tournament',
     functionArgs: [
-      { type: 'string-ascii', data: name },
+      stringAsciiCV(name),
       uintCV(difficulty),
       uintCV(entryFee),
       uintCV(maxPlayers),
