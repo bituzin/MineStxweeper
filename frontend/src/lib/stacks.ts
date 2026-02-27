@@ -199,6 +199,61 @@ export async function toggleFlag(gameId: number, x: number, y: number) {
 // READ-ONLY CALLS
 // ============================================================================
 
+const STACKS_API = 'https://api.mainnet.hiro.so';
+
+/**
+ * Polls the Stacks API until a transaction is confirmed, then extracts
+ * the numeric game-id from the contract print event emitted by create-game.
+ * Returns null if not found within the timeout.
+ */
+export async function pollGameIdFromTx(
+  txid: string,
+  maxAttempts = 30,
+  intervalMs = 5000
+): Promise<number | null> {
+  for (let i = 0; i < maxAttempts; i++) {
+    try {
+      const res = await fetch(`${STACKS_API}/extended/v1/tx/${txid}`);
+      if (!res.ok) {
+        await new Promise((r) => setTimeout(r, intervalMs));
+        continue;
+      }
+      const data = await res.json();
+
+      if (data.tx_status === 'pending' || data.tx_status === 'dropped') {
+        await new Promise((r) => setTimeout(r, intervalMs));
+        continue;
+      }
+
+      if (data.tx_status !== 'success') {
+        console.error('Transaction failed:', data.tx_status);
+        return null;
+      }
+
+      // Find the contract print event with game-id
+      const events: any[] = data.events ?? [];
+      for (const event of events) {
+        if (
+          event.event_type === 'contract_event' &&
+          event.contract_event?.contract_identifier?.includes(CONTRACT_NAME_GAME_CORE)
+        ) {
+          const repr: string = event.contract_event?.value?.repr ?? '';
+          const match = repr.match(/game-id\s+u(\d+)/);
+          if (match) {
+            return Number(match[1]);
+          }
+        }
+      }
+
+      // If confirmed but no event found
+      return null;
+    } catch {
+      await new Promise((r) => setTimeout(r, intervalMs));
+    }
+  }
+  return null;
+}
+
 export async function getGameInfo(gameId: number) {
   // Implement read-only call using Stacks.js
   // For now, return mock data
