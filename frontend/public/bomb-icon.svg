@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- Background -->
+  <rect width="64" height="64" fill="#1e2a6e"/>
+
+  <!-- Fuse cord (curved) -->
+  <path d="M35 18 Q40 11 45 15" stroke="#38bdf8" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+
+  <!-- Fuse tip -->
+  <circle cx="45" cy="14" r="2.5" fill="#7dd3fc"/>
+
+  <!-- Neck connector between fuse and body -->
+  <rect x="29.5" y="16" width="7" height="6" rx="2.5" fill="#38bdf8"/>
+
+  <!-- Bomb body - thick outlined circle (no fill) -->
+  <circle cx="32" cy="38" r="17" fill="none" stroke="#38bdf8" stroke-width="5"/>
+</svg>
