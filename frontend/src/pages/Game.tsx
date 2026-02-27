@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useGameStore } from '@/store/gameStore';
 import { Difficulty, GameStatus } from '@/types';
 import { Board } from '@/components/game/Board';
@@ -8,10 +8,16 @@ import { RefreshCw, Trophy, Skull } from 'lucide-react';
 import { checkWinCondition } from '@/lib/stacks';
 
 export function Game() {
-  const { startNewGame, resetGame, status, difficulty } = useGameStore();
+  const { startNewGame, resetGame, status, difficulty, gameId } = useGameStore();
   const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty>(Difficulty.BEGINNER);
   const [winGameId, setWinGameId] = useState('');
   const [submittingWin, setSubmittingWin] = useState(false);
+
+  useEffect(() => {
+    if (status === GameStatus.WON && gameId !== undefined) {
+      setWinGameId(String(gameId));
+    }
+  }, [status, gameId]);
 
   const [loading, setLoading] = useState(false);
   const handleStartGame = async () => {
@@ -111,24 +117,19 @@ export function Game() {
                 </div>
                 <p className="mb-4">Congratulations on clearing the board!</p>
                 <div className="bg-green-700 p-4 rounded-lg">
-                  <p className="text-sm mb-2">Aby zarejestrować wygraną i otrzymać nagrody:</p>
-                  <div className="flex gap-2">
-                    <input
-                      type="number"
-                      placeholder="Podaj Game ID z blockchaina"
-                      value={winGameId}
-                      onChange={(e) => setWinGameId(e.target.value)}
-                      className="flex-1 px-3 py-2 rounded bg-white text-gray-900"
-                    />
+                  <p className="text-sm mb-2 font-army">Zarejestruj wygraną na blockchainie i odbierz nagrody:</p>
+                  <div className="flex gap-2 items-center">
+                    <div className="flex-1 px-3 py-2 rounded bg-green-800 text-white font-army text-sm">
+                      Game ID: <span className="font-bold">{winGameId || '—'}</span>
+                    </div>
                     <Button 
                       onClick={handleSubmitWin} 
-                      disabled={submittingWin}
+                      disabled={submittingWin || !winGameId}
                       variant="secondary"
                     >
-                      {submittingWin ? 'Submitting...' : 'Submit Win'}
+                      <span className="font-army">{submittingWin ? 'Submitting...' : 'Submit Win'}</span>
                     </Button>
                   </div>
-                  <p className="text-xs mt-2 opacity-80">Game ID znajdziesz w sekcji History lub w transakcji create-game</p>
                 </div>
               </div>
             )}

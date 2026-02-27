@@ -18,7 +18,7 @@ import {
   countFlags,
   countRevealedCells,
 } from '@/lib/game-logic';
-import { createGame, generateBoard } from '@/lib/stacks';
+import { createGame, generateBoard, pollGameIdFromTx } from '@/lib/stacks';
 
 interface GameStore extends GameState {
   // Actions
@@ -60,16 +60,24 @@ export const useGameStore = create<GameStore>((set, get) => ({
     try {
       // Wywołanie kontraktu na blockchainie
       const txid = await createGame(difficulty);
-      // Ustaw gameId na txid (placeholder, docelowo pobierz z blockchaina)
-      set({ gameId: txid as unknown as number, status: GameStatus.IN_PROGRESS, startedAt: Date.now() });
-      // Wywołanie generowania planszy przez kontrakt board-generator-05
-      await generateBoard(txid as unknown as number, config.width, config.height);
-      // Pobierz planszę z blockchaina (placeholder)
-      // const boardOnChain = await fetchBoard(txid);
-      // set({ board: boardOnChain });
-      console.log('Game created on chain, ready to play!');
+      // Ustaw tymczasowy stan oczekiwania
+      set({ gameId: undefined, status: GameStatus.IN_PROGRESS, startedAt: Date.now() });
+
+      // Asynchronicznie czekaj na potwierdzenie i pobierz prawdziwy game-id z print eventu
+      pollGameIdFromTx(txid).then((realGameId) => {
+        if (realGameId !== null) {
+          set({ gameId: realGameId });
+          // Po uzyskaniu game-id wywołaj generowanie planszy
+          const cfg = BOARD_CONFIGS[difficulty];
+          generateBoard(realGameId, cfg.width, cfg.height).catch(console.error);
+          console.log('Real on-chain game-id:', realGameId);
+        } else {
+          console.warn('Could not retrieve game-id from transaction:', txid);
+        }
+      });
+
+      console.log('Transaction submitted, waiting for confirmation...');
     } catch (error) {
-      // Obsługa błędów
       console.error('Failed to create game on chain:', error);
     }
   },
