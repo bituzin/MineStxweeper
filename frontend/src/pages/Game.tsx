@@ -5,18 +5,31 @@ import { Board } from '@/components/game/Board';
 import { GameInfo } from '@/components/game/GameInfo';
 import { Button } from '@/components/ui/Button';
 import { RefreshCw, Trophy, Skull } from 'lucide-react';
-import { checkWinCondition } from '@/lib/stacks';
+import { checkWinCondition, isAuthenticated } from '@/lib/stacks';
 
 export function Game() {
   const { startNewGame, resetGame, status, difficulty, gameId } = useGameStore();
   const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty>(Difficulty.BEGINNER);
   const [winGameId, setWinGameId] = useState('');
   const [submittingWin, setSubmittingWin] = useState(false);
+  const [gameIdTimeout, setGameIdTimeout] = useState(false);
 
   useEffect(() => {
     if (status === GameStatus.WON && gameId !== undefined) {
       setWinGameId(String(gameId));
+      setGameIdTimeout(false);
     }
+  }, [status, gameId]);
+
+  // If won but no gameId after 3 minutes, show wallet message
+  useEffect(() => {
+    if (status !== GameStatus.WON) {
+      setGameIdTimeout(false);
+      return;
+    }
+    if (gameId !== undefined) return;
+    const timer = setTimeout(() => setGameIdTimeout(true), 3 * 60 * 1000);
+    return () => clearTimeout(timer);
   }, [status, gameId]);
 
   const [loading, setLoading] = useState(false);
@@ -130,6 +143,14 @@ export function Game() {
                       >
                         <span className="font-army">{submittingWin ? 'Submitting...' : 'Submit Win'}</span>
                       </Button>
+                    </div>
+                  ) : !isAuthenticated() ? (
+                    <div className="px-3 py-2 rounded bg-yellow-700 text-white font-army text-sm">
+                      ⚠️ Podłącz portfel aby zarejestrować wygraną na blockchainie.
+                    </div>
+                  ) : gameIdTimeout ? (
+                    <div className="px-3 py-2 rounded bg-yellow-700 text-white font-army text-sm">
+                      ⚠️ Nie można pobrać Game ID. Sprawdź czy transakcja create-game została zatwierdzona w portfelu.
                     </div>
                   ) : (
                     <div className="flex items-center gap-3 px-3 py-2 rounded bg-green-800 text-white font-army text-sm">
