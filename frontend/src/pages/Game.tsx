@@ -5,18 +5,31 @@ import { Board } from '@/components/game/Board';
 import { GameInfo } from '@/components/game/GameInfo';
 import { Button } from '@/components/ui/Button';
 import { RefreshCw, Trophy, Skull } from 'lucide-react';
-import { checkWinCondition } from '@/lib/stacks';
+import { checkWinCondition, isAuthenticated } from '@/lib/stacks';
 
 export function Game() {
   const { startNewGame, resetGame, status, difficulty, gameId } = useGameStore();
   const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty>(Difficulty.BEGINNER);
   const [winGameId, setWinGameId] = useState('');
   const [submittingWin, setSubmittingWin] = useState(false);
+  const [gameIdTimeout, setGameIdTimeout] = useState(false);
 
   useEffect(() => {
     if (status === GameStatus.WON && gameId !== undefined) {
       setWinGameId(String(gameId));
+      setGameIdTimeout(false);
     }
+  }, [status, gameId]);
+
+  // If won but no gameId after 20 seconds, show fallback input
+  useEffect(() => {
+    if (status !== GameStatus.WON) {
+      setGameIdTimeout(false);
+      return;
+    }
+    if (gameId !== undefined) return;
+    const timer = setTimeout(() => setGameIdTimeout(true), 20000);
+    return () => clearTimeout(timer);
   }, [status, gameId]);
 
   const [loading, setLoading] = useState(false);
@@ -118,18 +131,52 @@ export function Game() {
                 <p className="mb-4">Congratulations on clearing the board!</p>
                 <div className="bg-green-700 p-4 rounded-lg">
                   <p className="text-sm mb-2 font-army">Zarejestruj wygraną na blockchainie i odbierz nagrody:</p>
-                  <div className="flex gap-2 items-center">
-                    <div className="flex-1 px-3 py-2 rounded bg-green-800 text-white font-army text-sm">
-                      Game ID: <span className="font-bold">{winGameId || '—'}</span>
+                  {winGameId ? (
+                    <div className="flex gap-2 items-center">
+                      <div className="flex-1 px-3 py-2 rounded bg-green-800 text-white font-army text-sm">
+                        Game ID: <span className="font-bold">{winGameId}</span>
+                      </div>
+                      <Button 
+                        onClick={handleSubmitWin} 
+                        disabled={submittingWin}
+                        variant="secondary"
+                      >
+                        <span className="font-army">{submittingWin ? 'Submitting...' : 'Submit Win'}</span>
+                      </Button>
                     </div>
-                    <Button 
-                      onClick={handleSubmitWin} 
-                      disabled={submittingWin || !winGameId}
-                      variant="secondary"
-                    >
-                      <span className="font-army">{submittingWin ? 'Submitting...' : 'Submit Win'}</span>
-                    </Button>
-                  </div>
+                  ) : !isAuthenticated() ? (
+                    <div className="px-3 py-2 rounded bg-yellow-700 text-white font-army text-sm">
+                      ⚠️ Podłącz portfel aby zarejestrować wygraną na blockchainie.
+                    </div>
+                  ) : gameIdTimeout ? (
+                    <div className="space-y-2">
+                      <p className="text-xs text-yellow-200 font-army">⚠️ Nie udało się automatycznie pobrać Game ID. Wpisz ręcznie z historii transakcji:</p>
+                      <div className="flex gap-2 items-center">
+                        <input
+                          type="number"
+                          placeholder="Wpisz Game ID..."
+                          value={winGameId}
+                          onChange={(e) => setWinGameId(e.target.value)}
+                          className="flex-1 px-3 py-2 rounded bg-white text-gray-900 font-army text-sm"
+                        />
+                        <Button
+                          onClick={handleSubmitWin}
+                          disabled={submittingWin || !winGameId}
+                          variant="secondary"
+                        >
+                          <span className="font-army">{submittingWin ? 'Submitting...' : 'Submit Win'}</span>
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-3 px-3 py-2 rounded bg-green-800 text-white font-army text-sm">
+                      <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+                      </svg>
+                      <span>Pobieranie Game ID z blockchaina...</span>
+                    </div>
+                  )}
                 </div>
               </div>
             )}
