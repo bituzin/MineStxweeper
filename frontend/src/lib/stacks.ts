@@ -12,6 +12,8 @@ import {
   stringAsciiCV,
   deserializeCV,
   cvToValue,
+  cvToHex,
+  standardPrincipalCV,
 } from '@stacks/transactions';
 
 // ============================================================================
@@ -202,54 +204,55 @@ export async function toggleFlag(gameId: number, x: number, y: number) {
 const STACKS_API = 'https://api.mainnet.hiro.so';
 
 /**
- * Polls the Stacks API until a transaction is confirmed, then extracts
- * the numeric game-id from the contract print event emitted by create-game.
- * Returns null if not found within the timeout.
+ * Calls the read-only get-player-active-games function on the contract.
+ * Returns the list of game IDs for the given player, or null on error.
  */
-export async function pollGameIdFromTx(
-  txid: string,
-  maxAttempts = 30,
-  intervalMs = 5000
+export async function fetchPlayerActiveGames(playerAddress: string): Promise<number[] | null> {
+  try {
+    const res = await fetch(
+      `${STACKS_API}/v2/contracts/call-read/${CONTRACT_ADDRESS}/${CONTRACT_NAME_GAME_CORE}/get-player-active-games`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sender: playerAddress,
+          arguments: [cvToHex(standardPrincipalCV(playerAddress))],
+        }),
+      }
+    );
+    if (!res.ok) return null;
+    const data = await res.json();
+    if (!data.okay) return null;
+
+    // Parse the Clarity list response - repr looks like "(list u1 u2 u3)"
+    const repr: string = data.result?.repr ?? '';
+    const matches = [...repr.matchAll(/u(\d+)/g)];
+    return matches.map((m) => Number(m[1]));
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Polls get-player-active-games until a new game ID appears (not in previousIds).
+ * Returns the new game ID or null on timeout.
+ */
+export async function pollNewGameId(
+  playerAddress: string,
+  previousIds: number[],
+  maxAttempts = 40,
+  intervalMs = 4000
 ): Promise<number | null> {
   for (let i = 0; i < maxAttempts; i++) {
-    try {
-      const res = await fetch(`${STACKS_API}/extended/v1/tx/${txid}`);
-      if (!res.ok) {
-        await new Promise((r) => setTimeout(r, intervalMs));
-        continue;
+    const games = await fetchPlayerActiveGames(playerAddress);
+    if (games !== null) {
+      const newIds = games.filter((id) => !previousIds.includes(id));
+      if (newIds.length > 0) {
+        // Return the highest new ID (latest game)
+        return Math.max(...newIds);
       }
-      const data = await res.json();
-
-      if (data.tx_status === 'pending' || data.tx_status === 'dropped') {
-        await new Promise((r) => setTimeout(r, intervalMs));
-        continue;
-      }
-
-      if (data.tx_status !== 'success') {
-        console.error('Transaction failed:', data.tx_status);
-        return null;
-      }
-
-      // Find the contract print event with game-id
-      const events: any[] = data.events ?? [];
-      for (const event of events) {
-        if (
-          event.event_type === 'contract_event' &&
-          event.contract_event?.contract_identifier?.includes(CONTRACT_NAME_GAME_CORE)
-        ) {
-          const repr: string = event.contract_event?.value?.repr ?? '';
-          const match = repr.match(/game-id\s+u(\d+)/);
-          if (match) {
-            return Number(match[1]);
-          }
-        }
-      }
-
-      // If confirmed but no event found
-      return null;
-    } catch {
-      await new Promise((r) => setTimeout(r, intervalMs));
     }
+    await new Promise((r) => setTimeout(r, intervalMs));
   }
   return null;
 }

@@ -18,7 +18,7 @@ import {
   countFlags,
   countRevealedCells,
 } from '@/lib/game-logic';
-import { createGame, generateBoard, pollGameIdFromTx } from '@/lib/stacks';
+import { createGame, generateBoard, pollNewGameId, fetchPlayerActiveGames, getUserAddress } from '@/lib/stacks';
 
 interface GameStore extends GameState {
   // Actions
@@ -58,23 +58,30 @@ export const useGameStore = create<GameStore>((set, get) => ({
     });
 
     try {
+      const playerAddress = getUserAddress();
+
+      // Pobierz aktualną listę gier gracza PRZED stworzeniem nowej
+      const previousIds = playerAddress
+        ? (await fetchPlayerActiveGames(playerAddress)) ?? []
+        : [];
+
       // Wywołanie kontraktu na blockchainie
-      const txid = await createGame(difficulty);
-      // Ustaw tymczasowy stan oczekiwania
+      await createGame(difficulty);
       set({ gameId: undefined, status: GameStatus.IN_PROGRESS, startedAt: Date.now() });
 
-      // Asynchronicznie czekaj na potwierdzenie i pobierz prawdziwy game-id z print eventu
-      pollGameIdFromTx(txid).then((realGameId) => {
-        if (realGameId !== null) {
-          set({ gameId: realGameId });
-          // Po uzyskaniu game-id wywołaj generowanie planszy
-          const cfg = BOARD_CONFIGS[difficulty];
-          generateBoard(realGameId, cfg.width, cfg.height).catch(console.error);
-          console.log('Real on-chain game-id:', realGameId);
-        } else {
-          console.warn('Could not retrieve game-id from transaction:', txid);
-        }
-      });
+      if (playerAddress) {
+        // Polluj kontrakt aż pojawi się nowe game-id gracza
+        pollNewGameId(playerAddress, previousIds).then((realGameId) => {
+          if (realGameId !== null) {
+            set({ gameId: realGameId });
+            const cfg = BOARD_CONFIGS[difficulty];
+            generateBoard(realGameId, cfg.width, cfg.height).catch(console.error);
+            console.log('Real on-chain game-id:', realGameId);
+          } else {
+            console.warn('Could not retrieve game-id from contract');
+          }
+        });
+      }
 
       console.log('Transaction submitted, waiting for confirmation...');
     } catch (error) {
