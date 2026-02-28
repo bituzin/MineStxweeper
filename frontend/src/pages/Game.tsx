@@ -21,14 +21,14 @@ export function Game() {
     }
   }, [status, gameId]);
 
-  // If won but no gameId after 3 minutes, show wallet message
+  // If won but no gameId after 20 seconds, show fallback input
   useEffect(() => {
     if (status !== GameStatus.WON) {
       setGameIdTimeout(false);
       return;
     }
     if (gameId !== undefined) return;
-    const timer = setTimeout(() => setGameIdTimeout(true), 3 * 60 * 1000);
+    const timer = setTimeout(() => setGameIdTimeout(true), 20000);
     return () => clearTimeout(timer);
   }, [status, gameId]);
 
@@ -149,8 +149,24 @@ export function Game() {
                       ⚠️ Podłącz portfel aby zarejestrować wygraną na blockchainie.
                     </div>
                   ) : gameIdTimeout ? (
-                    <div className="px-3 py-2 rounded bg-yellow-700 text-white font-army text-sm">
-                      ⚠️ Nie można pobrać Game ID. Sprawdź czy transakcja create-game została zatwierdzona w portfelu.
+                    <div className="space-y-2">
+                      <p className="text-xs text-yellow-200 font-army">⚠️ Nie udało się automatycznie pobrać Game ID. Wpisz ręcznie z historii transakcji:</p>
+                      <div className="flex gap-2 items-center">
+                        <input
+                          type="number"
+                          placeholder="Wpisz Game ID..."
+                          value={winGameId}
+                          onChange={(e) => setWinGameId(e.target.value)}
+                          className="flex-1 px-3 py-2 rounded bg-white text-gray-900 font-army text-sm"
+                        />
+                        <Button
+                          onClick={handleSubmitWin}
+                          disabled={submittingWin || !winGameId}
+                          variant="secondary"
+                        >
+                          <span className="font-army">{submittingWin ? 'Submitting...' : 'Submit Win'}</span>
+                        </Button>
+                      </div>
                     </div>
                   ) : (
                     <div className="flex items-center gap-3 px-3 py-2 rounded bg-green-800 text-white font-army text-sm">
@@ -158,7 +174,7 @@ export function Game() {
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
                       </svg>
-                      <span>Oczekiwanie na potwierdzenie transakcji i Game ID...</span>
+                      <span>Pobieranie Game ID z blockchaina...</span>
                     </div>
                   )}
                 </div>
