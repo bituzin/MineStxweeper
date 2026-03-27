@@ -1,6 +1,6 @@
 import React from 'react';
 import { useGameStore } from '@/store/gameStore';
-import { CellComponent } from './Cell';
+import { CellComponent } from './CellComponent';
 
 export function Board() {
   const { board } = useGameStore();
